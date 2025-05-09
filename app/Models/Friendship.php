@@ -47,7 +47,7 @@ class Friendship extends Model
      * Block the relationship between users and save the status.
      * @return void
      */
-    public function blocked(): void
+    public function block(): void
     {
         $this->status = FriendshipStatus::BLOCKED;
         $this->save();
@@ -57,7 +57,7 @@ class Friendship extends Model
      * Reject the friendship request and delete the relationship.
      * @return void
      */
-    public function rejected(): void
+    public function reject(): void
     {
         $this->delete();
     }

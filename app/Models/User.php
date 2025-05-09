@@ -3,13 +3,16 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use LaravelIdea\Helper\App\Models\_IH_User_C;
 
 class User extends Authenticatable
 {
@@ -102,4 +105,82 @@ class User extends Authenticatable
             ->wherePivot('status', 'blocked');
     }
 
+    /**
+     * Check if the user is a customer.
+     * @return bool
+     */
+    public function isCustomer(): bool
+    {
+        return $this->customer()->exists();
+    }
+
+    /**
+     * Check if the user is a hotel owner.
+     * @return bool
+     */
+    public function isHotel(): bool
+    {
+        return $this->hotel()->exists();
+    }
+
+    /**
+     * Block a user.
+     * @param Model|Collection|array|User|_IH_User_C $user2
+     * @return bool
+     */
+    public function block(Model|Collection|array|User|_IH_User_C $user2): void
+    {
+        if ($user2 instanceof User) {
+            $this->blockedFriends()->attach($user2->id, ['status' => 'blocked']);
+        } elseif ($user2 instanceof Collection) {
+            foreach ($user2 as $user) {
+                $this->blockedFriends()->attach($user->id, ['status' => 'blocked']);
+            }
+        } elseif (is_array($user2)) {
+            foreach ($user2 as $user) {
+                $this->blockedFriends()->attach($user['id'], ['status' => 'blocked']);
+            }
+        }
+    }
+
+    /**
+     * Check if the user is blocked by another user.
+     * @param Model|Collection|array|User|_IH_User_C $user2
+     * @return bool
+     */
+    public function isBlockedBy(Model|Collection|array|User|_IH_User_C $user2): bool
+    {
+        if ($user2 instanceof User) {
+            return $this->blockedFriends()->where('user_1_id', $user2->id)->exists();
+        } elseif ($user2 instanceof Collection) {
+            foreach ($user2 as $user) {
+                if ($this->blockedFriends()->where('user_1_id', $user->id)->exists()) {
+                    return true;
+                }
+            }
+        } elseif (is_array($user2)) {
+            foreach ($user2 as $user) {
+                if ($this->blockedFriends()->where('user_1_id', $user['id'])->exists()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public function unblock(Model|Collection|array|User|_IH_User_C $user2): void
+    {
+        if ($user2 instanceof User) {
+            $this->blockedFriends()->detach($user2->id);
+        } elseif ($user2 instanceof Collection) {
+            foreach ($user2 as $user) {
+                $this->blockedFriends()->detach($user->id);
+            }
+        } elseif (is_array($user2)) {
+            foreach ($user2 as $user) {
+                $this->blockedFriends()->detach($user['id']);
+            }
+        }
+    }
 }
