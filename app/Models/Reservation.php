@@ -17,7 +17,7 @@ class Reservation extends Model
         'check_out',
         'adults',
         'children',
-        'room_id',
+        'room_type_id',
         'price'
     ];
 
@@ -26,7 +26,7 @@ class Reservation extends Model
         return $this->belongsTo(Customer::class);
     }
 
-    public function room(): BelongsTo
+    public function roomType(): BelongsTo
     {
         return $this->belongsTo(RoomType::class);
     }

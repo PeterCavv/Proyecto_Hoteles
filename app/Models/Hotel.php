@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Hotel extends Model
 {
@@ -31,13 +32,18 @@ class Hotel extends Model
         return $this->belongsToMany(Feature::class, 'hotel_features');
     }
 
-    public function reviews(): BelongsToMany
+    public function reviews(): HasMany
     {
-        return $this->belongsToMany(Review::class, 'hotel_reviews');
+        return $this->hasMany(Review::class);
     }
 
-    public function follows()
+    public function customers(): BelongsToMany
     {
-        return $this->hasMany(Follow::class, 'hotel_id');
+        return $this->belongsToMany(
+            Customer::class,
+            'follows',
+            'hotel_id',
+            'customer_id'
+        )->withPivot('followed_at')->withTimestamps();
     }
 }

@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->date('check_out');
             $table->integer('adults');
             $table->integer('children')->nullable();
-            $table->foreignId('room_id')->constrained('room_types')->onDelete('cascade');
+            $table->foreignId('room_type_id')->constrained('room_types')->onDelete('cascade');
             $table->integer('price');
             $table->timestamps();
         });

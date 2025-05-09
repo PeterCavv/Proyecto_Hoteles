@@ -24,7 +24,7 @@ class ReservationFactory extends Factory
             'check_out' => $checkOut,
             'adults' => $this->faker->numberBetween(1, 4),
             'children' => $this->faker->numberBetween(0, 3),
-            'room_id' => RoomType::factory()->create()->id,
+            'room_type_id' => RoomType::factory()->create()->id,
             'price' => $this->faker->randomFloat(2, 50, 500),
         ];
     }
