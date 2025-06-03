@@ -5,6 +5,7 @@ import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createApp, h } from 'vue';
 import setupI18n from './i18n'
+import ToastService from 'primevue/toastservice';
 import PrimeVue from 'primevue/config';
 import { Ziggy } from './ziggy';
 import { ZiggyVue } from 'ziggy-js';
@@ -37,6 +38,7 @@ createInertiaApp({
                 },
             })
             .use(ZiggyVue, Ziggy)
+            .use(ToastService)
             .component('Button', Button)
             .mount(el);
     },

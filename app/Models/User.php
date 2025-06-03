@@ -32,7 +32,14 @@ class User extends Authenticatable
         'password',
         'avatar',
         'phone_number',
+        'city'
     ];
+
+    protected $casts = [
+        'role' => RoleEnum::class,
+    ];
+
+    protected $appends = ['role_name'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -195,5 +202,15 @@ class User extends Authenticatable
                 $this->blockedFriends()->detach($user['id']);
             }
         }
+    }
+
+    /**
+     * Get the user's role name.
+     *
+     * @return string
+     */
+    public function getRoleNameAttribute(): string
+    {
+        return $this->roles->first()?->name ?? '';
     }
 }

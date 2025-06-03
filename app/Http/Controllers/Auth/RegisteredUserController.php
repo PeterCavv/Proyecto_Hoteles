@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\RoleEnum;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
@@ -34,6 +35,7 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'dni' => 'nullable|string|max:9|unique:customers,dni,' . $request->route('customer'),
         ]);
 
         $user = User::create([
@@ -42,6 +44,10 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        $user->assignRole(RoleEnum::CUSTOMER->value);
+        $user->customer()->create([
+            'dni' => $request->dni,
+        ]);
         event(new Registered($user));
 
         Auth::login($user);

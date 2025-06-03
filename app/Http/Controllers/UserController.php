@@ -1,0 +1,43 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\User\UpdateUserRequest;
+use App\Models\User;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
+class UserController extends Controller
+{
+    use AuthorizesRequests;
+
+    public function index()
+    {
+        $this->authorize('index', User::class);
+
+        $users = User::all()->load('customer');
+
+        return inertia('Admin/UserIndex', [
+            'users' => $users,
+            'role' => auth()->user() ? auth()->user()->getRoleNames() : [],
+        ]);
+    }
+
+    public function show(User $user)
+    {
+        return inertia('Profile/UserProfile', [
+            'user' => $user->load('roles', 'customer'),
+            'authUserId' => auth()->id(),
+            'csrfToken' => csrf_token(),
+        ]);
+    }
+
+    public function update(UpdateUserRequest $request, User $user)
+    {
+        $this->authorize('update', $user);
+
+        $user->update($request->validated());
+
+        return redirect()->route('profile.show', $user)
+            ->with('success', 'Profile updated successfully.');
+    }
+}

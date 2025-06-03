@@ -9,6 +9,7 @@ use App\Models\Review;
 use App\Models\User;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 uses(RefreshDatabase::class);
@@ -67,14 +68,19 @@ it('can block and unblock users', function () {
 });
 
 it('can detect if it is a customer or hotel owner', function () {
+    Role::findOrCreate('customer');
+    Role::findOrCreate('hotel');
+
     expect($this->user->isCustomer())->toBeFalse()
         ->and($this->user->isHotel())->toBeFalse();
 
     Customer::factory()->create(['user_id' => $this->user->id]);
+    $this->user->assignRole('customer');
     $this->user->refresh();
     expect($this->user->isCustomer())->toBeTrue();
 
     Hotel::factory()->create(['user_id' => $this->user->id]);
+    $this->user->syncRoles(['hotel']);
     $this->user->refresh();
     expect($this->user->isHotel())->toBeTrue();
 });

@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -34,9 +35,10 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'auth' => [
                 'user' => $request->user(),
-                'is_admin' => $request->user()?->hasRole('admin'),
-                'is_customer' => $request->user()?->hasRole('customer'),
-                'is_employee' => $request->user()?->hasRole('employee'),
+                'is_admin' => $request->user()?->isAdmin(),
+                'is_customer' => $request->user()?->isCustomer(),
+                'is_employee' => $request->user()?->isHotel(),
+                'impersonating' => Session::has('impersonator_id'),
             ],
 
             'locale' => App::getLocale(),
