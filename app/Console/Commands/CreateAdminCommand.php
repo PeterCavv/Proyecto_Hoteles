@@ -24,13 +24,13 @@ class CreateAdminCommand extends Command
 
         if (User::where('email', $email)->exists()) {
             $this->error("El usuario con email {$email} ya existe.");
-            return 1; // Código de error
+            return 1;
         }
 
         $validator = Validator::make([
             'name' => $name,
             'email' => $email,
-            'password' => Hash::make($password),
+            'password' => $password,
         ], [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
@@ -53,7 +53,7 @@ class CreateAdminCommand extends Command
         $user->assignRole('admin');
 
         $this->info("Usuario admin '{$name}' creado correctamente.");
-        return 0; // Éxito
+        return 0;
     }
 }
 

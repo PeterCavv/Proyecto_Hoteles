@@ -44,14 +44,15 @@ const { t } = useI18n();
 
         <div
             v-if="$page.props.auth.impersonating"
-            class="bg-yellow-200 text-yellow-900 text-center py-3 px-4 shadow-inner"
+            class="bg-yellow-200 text-yellow-900 text-center py-3 px-4 shadow-inner fixed bottom-0 left-0 right-0 z-50"
         >
-            <i class="pi pi-exclamation-triangle"/> {{ t('messages.impersonating_warning_1') }} {{ $page.props.auth.user.name }}
+            <i class="pi pi-exclamation-triangle" /> {{ t('messages.impersonating_warning_1') }} {{ $page.props.auth.user.name }}
 
             <Link
                 icon="pi pi-times"
                 class="ml-2 p-1 hover:text-yellow-600 rounded-full underline cursor-pointer"
-                href="/impersonate/stop">
+                href="/impersonate/stop"
+            >
                 Detener Impersonación
             </Link>
         </div>
