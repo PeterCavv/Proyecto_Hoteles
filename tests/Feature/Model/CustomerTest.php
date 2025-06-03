@@ -12,45 +12,52 @@ use Tests\TestCase;
 
 uses(RefreshDatabase::class);
 
-it('can be created with a user', function () {
-    $user = User::factory()->create();
-    $customer = Customer::factory()->create(['user_id' => $user->id]);
+beforeEach(function () {
+    $this->user = User::factory()->create();
+    $this->customer = Customer::factory()->create();
+});
 
-    expect($customer)->toBeInstanceOf(Customer::class)
-        ->and($customer->user_id)->toBe($user->id);
-})->uses(TestCase::class);
+it('has the correct fillable properties', function () {
+    $customer = new Customer();
+
+    expect($customer->getFillable())->toBe([
+        'user_id',
+        'name',
+        'last_name',
+        'dni',
+    ]);
+});
 
 it('belongs to a user', function () {
-    $user = User::factory()->create();
-    $customer = Customer::factory()->create(['user_id' => $user->id]);
+    $customer = Customer::factory()->create(['user_id' => $this->user->id]);
 
     expect($customer->user)->toBeInstanceOf(User::class)
-        ->and($customer->user->id)->toBe($user->id);
-})->uses(TestCase::class);
+        ->and($customer->user->id)->toBe($this->user->id);
+});
 
 it('has many reservations', function () {
-    $customer = Customer::factory()->create();
-    $reservation1 = Reservation::factory()->create(['customer_id' => $customer->id]);
-    $reservation2 = Reservation::factory()->create(['customer_id' => $customer->id]);
+    Reservation::factory()->count(2)->create([
+        'customer_id' => $this->customer->id,
+    ]);
 
-    expect($customer->reservations)->toHaveCount(2)
-        ->and($customer->reservations->first()->id)->toBe($reservation1->id)
-        ->and($customer->reservations->last()->id)->toBe($reservation2->id);
-})->uses(TestCase::class);
+    expect($this->customer->reservations)->toHaveCount(2)
+        ->and($this->customer->reservations->first())->toBeInstanceOf(Reservation::class);
+});
 
 it('has many follows', function () {
-    $customer = Customer::factory()->create();
-    $hotel = Hotel::factory()->create();
-    $hotel2 = Hotel::factory()->create();
+    $hotels = Hotel::factory()->count(2)->create();
 
-    $customer->hotels()->attach($hotel->id, ['followed_at' => now()]);
-    $customer->hotels()->attach($hotel2->id, ['followed_at' => now()]);
+    foreach ($hotels as $hotel) {
+        Follow::create([
+            'customer_id' => $this->customer->id,
+            'hotel_id' => $hotel->id,
+            'followed_at' => now(),
+        ]);
+    }
 
-    $customer->load('hotels');
+    $this->customer->refresh();
 
-    $follows = $customer->hotels;
+    expect($this->customer->follows)->toHaveCount(2)
+        ->and($this->customer->follows->first())->toBeInstanceOf(Follow::class);
+});
 
-    expect($follows)->toHaveCount(2)
-        ->and($follows->first()->id)->toBe($hotel->id)
-        ->and($follows->last()->id)->toBe($hotel2->id);
-})->uses(TestCase::class);

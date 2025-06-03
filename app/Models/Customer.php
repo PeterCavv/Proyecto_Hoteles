@@ -29,13 +29,8 @@ class Customer extends Model
         return $this->hasMany(Reservation::class);
     }
 
-    public function hotels(): BelongsToMany
+    public function follows(): HasMany
     {
-        return $this->belongsToMany(
-            Hotel::class,
-            'follows',
-            'customer_id',
-            'hotel_id'
-        )->withPivot('followed_at')->withTimestamps();
+        return $this->hasMany(Follow::class);
     }
 }

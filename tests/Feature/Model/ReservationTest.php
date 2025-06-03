@@ -12,26 +12,28 @@ use Tests\TestCase;
 
 uses(RefreshDatabase::class);
 
+beforeEach(function () {
+    $this->customer = Customer::factory()->create();
+    $this->hotel = Hotel::factory()->create();
+    $this->roomType = RoomType::factory()->create();
+    $this->reservation = Reservation::factory()->create([
+        'customer_id' => $this->customer->id,
+        'hotel_id' => $this->hotel->id,
+        'room_type_id' => $this->roomType->id,
+    ]);
+});
+
 it('belongs to a customer', function () {
-    $customer = Customer::factory()->create();
-    $reservation = Reservation::factory()->create(['customer_id' => $customer->id]);
+    expect($this->reservation->customer)->toBeInstanceOf(Customer::class)
+        ->and($this->reservation->customer->id)->toBe($this->customer->id);
+});
 
-    expect($reservation->customer)->toBeInstanceOf(Customer::class)
-        ->and($reservation->customer->id)->toBe($customer->id);
-})->uses(TestCase::class);
-
-it('belongs to a room', function () {
-    $room = RoomType::factory()->create();
-    $reservation = Reservation::factory()->create(['room_type_id' => $room->id]);
-
-    expect($reservation->roomType)->toBeInstanceOf(RoomType::class)
-        ->and($reservation->roomType->id)->toBe($room->id);
-})->uses(TestCase::class);
+it('belongs to a room type', function () {
+    expect($this->reservation->roomType)->toBeInstanceOf(RoomType::class)
+        ->and($this->reservation->roomType->id)->toBe($this->roomType->id);
+});
 
 it('belongs to a hotel', function () {
-    $hotel = Hotel::factory()->create();
-    $reservation = Reservation::factory()->create(['hotel_id' => $hotel->id]);
-
-    expect($reservation->hotel)->toBeInstanceOf(Hotel::class)
-        ->and($reservation->hotel->id)->toBe($hotel->id);
-})->uses(TestCase::class);
+    expect($this->reservation->hotel)->toBeInstanceOf(Hotel::class)
+        ->and($this->reservation->hotel->id)->toBe($this->hotel->id);
+});

@@ -11,46 +11,50 @@ use Tests\TestCase;
 
 uses(RefreshDatabase::class);
 
+beforeEach(function () {
+    $this->user = User::factory()->create();
+    $this->hotel = Hotel::factory()->create();
+});
+
 it('belongs to user', function () {
-    $user = User::factory()->create();
-    $hotel = Hotel::factory()->create(['user_id' => $user->id]);
+    $hotel = Hotel::factory()->create(['user_id' => $this->user->id]);
 
     expect($hotel->user)->toBeInstanceOf(User::class)
-        ->and($hotel->user->id)->toBe($user->id);
-})->uses(TestCase::class);
+        ->and($hotel->user->id)->toBe($this->user->id);
+});
 
 it('has many features', function () {
     $feature1 = Feature::factory()->create();
     $feature2 = Feature::factory()->create();
-    $hotel = Hotel::factory()->create();
 
-    $hotel->features()->attach([$feature1->id, $feature2->id]);
+    $this->hotel->features()->attach([$feature1->id, $feature2->id]);
 
-    expect($hotel->features)->toHaveCount(2)
-        ->and($hotel->features->first()->id)->toBe($feature1->id);
-})->uses(TestCase::class);
+    $features = $this->hotel->features;
+
+    expect($features)->toHaveCount(2)
+        ->and($features->pluck('id'))->toContain($feature1->id);
+});
 
 it('has many reviews', function () {
-    $hotel = Hotel::factory()->create();
-    $user = User::factory()->create();
-    $review1 = Review::factory()->create(['user_id' => $user->id, 'hotel_id' => $hotel->id]);
-    $review2 = Review::factory()->create(['user_id' => $user->id, 'hotel_id' => $hotel->id]);
+    $review1 = Review::factory()->create(['user_id' => $this->user->id, 'hotel_id' => $this->hotel->id]);
+    $review2 = Review::factory()->create(['user_id' => $this->user->id, 'hotel_id' => $this->hotel->id]);
 
-    expect($hotel->reviews)->toHaveCount(2)
-        ->and($hotel->reviews->first()->id)->toBe($review1->id);
-})->uses(TestCase::class);
+    $reviews = $this->hotel->reviews;
+
+    expect($reviews)->toHaveCount(2)
+        ->and($reviews->pluck('id'))->toContain($review1->id);
+});
 
 it('has many follows', function () {
-    $hotel = Hotel::factory()->create();
     $customer1 = Customer::factory()->create();
     $customer2 = Customer::factory()->create();
 
-    $hotel->customers()->attach($customer1->id, ['followed_at' => now()]);
-    $hotel->customers()->attach($customer2->id, ['followed_at' => now()]);
+    Follow::factory()->create(['hotel_id' => $this->hotel->id, 'customer_id' => $customer1->id]);
+    Follow::factory()->create(['hotel_id' => $this->hotel->id, 'customer_id' => $customer2->id]);
 
-    $follows = $hotel->customers;
+    $follows = $this->hotel->follows;
 
     expect($follows)->toHaveCount(2)
-        ->and($follows->first()->id)->toBe($customer1->id)
-        ->and($follows->last()->id)->toBe($customer2->id);
-})->uses(TestCase::class);
+        ->and($follows->pluck('customer_id'))->toContain($customer1->id)
+        ->and($follows->pluck('customer_id'))->toContain($customer2->id);
+});

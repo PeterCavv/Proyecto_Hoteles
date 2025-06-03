@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -26,7 +27,7 @@ class Follow extends Model
         return $this->belongsTo(Hotel::class);
     }
 
-    public function scopeFollowed($query, $customerId)
+    public function scopeFollowed(Builder $query, int $customerId): Builder
     {
         return $query->where('customer_id', $customerId);
     }
