@@ -4,10 +4,11 @@ import './bootstrap';
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createApp, h } from 'vue';
+import setupI18n from './i18n'
 import PrimeVue from 'primevue/config';
 import { Ziggy } from './ziggy';
 import { ZiggyVue } from 'ziggy-js';
-import Aura from '@primeuix/themes/aura';
+import Material from '@primeuix/themes/material';
 import Button from "primevue/button"
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
@@ -20,11 +21,14 @@ createInertiaApp({
             import.meta.glob('./Pages/**/*.vue'),
         ),
     setup({ el, App, props, plugin }) {
+        const i18n = setupI18n(props.initialPage.props.translations, props.initialPage.props.locale);
+
         return createApp({ render: () => h(App, props) })
             .use(plugin)
+            .use(i18n)
             .use(PrimeVue, {
                 theme: {
-                    preset: Aura,
+                    preset: Material,
                     options: {
                         prefix: 'p',
                         darkModeSelector: 'light',

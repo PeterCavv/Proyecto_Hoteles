@@ -29,9 +29,9 @@ defineOptions({
                         class="p-4 border rounded-lg shadow-sm hover:shadow-md transition-shadow bg-white"
                     >
                         <h2 class="text-2xl font-semibold text-indigo-600 mb-1">
-                            {{ customer.name }}
+                            {{ customer.user.name }}
                         </h2>
-                        <p class="text-gray-700">{{ customer.email }}</p>
+                        <p class="text-gray-700">{{ customer.user.email }}</p>
                     </li>
                 </ul>
             </template>

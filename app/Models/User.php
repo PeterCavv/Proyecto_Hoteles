@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\RoleEnum;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -112,7 +113,7 @@ class User extends Authenticatable
      */
     public function isCustomer(): bool
     {
-        return $this->customer()->exists();
+        return $this->hasRole(RoleEnum::CUSTOMER->value);
     }
 
     /**
@@ -121,7 +122,18 @@ class User extends Authenticatable
      */
     public function isHotel(): bool
     {
-        return $this->hotel()->exists();
+        return $this->hasRole(RoleEnum::HOTEL->value);
+
+    }
+
+    /**
+     * Check if the user is an Admin.
+     * @return bool
+     */
+    public function isAdmin(): bool
+    {
+        return $this->hasRole(RoleEnum::ADMIN->value);
+
     }
 
     /**

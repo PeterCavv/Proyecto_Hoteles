@@ -1,7 +1,11 @@
 <script setup>
-import MainLayout from "@/Layouts/MainLayout.vue";
+import { useI18n } from 'vue-i18n'
+import {Head, usePage} from "@inertiajs/vue3";
 
-// Recibimos las props desde Laravel/Inertia
+const { t } = useI18n()
+const page = usePage()
+const user = page.props.auth?.user
+
 const props = defineProps({
     canLogin: Boolean,
     canRegister: Boolean,
@@ -9,25 +13,28 @@ const props = defineProps({
     phpVersion: String
 });
 
-defineOptions({
-    name: "Welcome",
-    layout: MainLayout,
-});
 </script>
 
 <template>
-    <div>
-        <h1 class="text-3xl font-bold mb-6">Bienvenido a Proyecto Hoteles</h1>
-
-        <p class="mb-4">
-            Laravel versión: <strong>{{ laravelVersion }}</strong><br>
-            PHP versión: <strong>{{ phpVersion }}</strong>
-        </p>
-
-        <div v-if="canLogin || canRegister" class="mb-6 space-x-4">
-            <a v-if="canLogin" href="/login" class="text-blue-600 hover:underline">Login</a>
-            <a v-if="canRegister" href="/register" class="text-blue-600 hover:underline">Registrarse</a>
+    <Head :title="t('messages.welcome')" />
+    <div v-if="!$page.props.auth.user" class="w-full h-full min-h-screen bg-gradient-to-br from-blue-500 via-blue-100 to-blue-300 flex items-center justify-center">
+        <div class="bg-white shadow-2xl rounded-2xl p-10 max-w-2xl w-full text-center space-y-6">
+            <h1 class="text-4xl font-bold text-blue-800">
+                {{ t('messages.welcome') }}
+            </h1>
+            <p class="text-gray-600 text-lg">
+                {{ t('messages.description') }}
+            </p>
+            <div class="mt-8">
+                <a
+                    href="/register"
+                    class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-full transition"
+                >
+                    {{ t('messages.get_started') }}
+                </a>
+            </div>
         </div>
     </div>
 </template>
+
 

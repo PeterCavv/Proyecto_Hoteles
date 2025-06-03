@@ -8,6 +8,11 @@ use Inertia\Inertia;
 // Public routes
 require base_path('routes/web_public.php');
 
+// Common routes
+Route::middleware(['auth'])->group(function () {
+    require base_path('routes/web_common.php');
+});
+
 // Admin routes
 Route::middleware(['auth', 'role:'.RoleEnum::ADMIN->value])->group(function () {
     require base_path('routes/web_admin.php');

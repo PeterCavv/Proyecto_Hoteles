@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -37,6 +38,15 @@ class HandleInertiaRequests extends Middleware
                 'is_customer' => $request->user()?->hasRole('customer'),
                 'is_employee' => $request->user()?->hasRole('employee'),
             ],
+
+            'locale' => App::getLocale(),
+
+            'translations' => function () {
+                return [
+                    'messages' => trans('messages'),
+                    'validation' => trans('validation'),
+                ];
+            },
         ];
     }
 }

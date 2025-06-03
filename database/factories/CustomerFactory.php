@@ -15,8 +15,6 @@ class CustomerFactory extends Factory
     {
         return [
             'user_id' => User::factory()->create()->id,
-            'name' => $this->faker->firstName,
-            'last_name' => $this->faker->lastName,
             'dni' => $this->faker->unique()->numerify('########'),
             'updated_at' => Carbon::now(),
         ];
