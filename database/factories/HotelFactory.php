@@ -16,7 +16,7 @@ class HotelFactory extends Factory
         return [
             'user_id' => User::factory()->create()->id,
             'name' => $this->faker->company,
-            'description' => $this->faker->paragraph(),
+            'description' => $this->faker->paragraph,
             'location' => $this->faker->address,
             'city' => $this->faker->city,
             'postal_code' => $this->faker->postcode,

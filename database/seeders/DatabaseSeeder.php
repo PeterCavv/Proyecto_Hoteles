@@ -20,9 +20,9 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UserSeeder::class,
             CustomerSeeder::class,
+            HotelSeeder::class,
             ReservationSeeder::class,
             FriendshipSeeder::class,
-            HotelSeeder::class,
             RoomTypeSeeder::class,
             ReviewSeeder::class,
         ]);

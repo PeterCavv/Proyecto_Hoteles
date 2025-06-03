@@ -33,6 +33,9 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'auth' => [
                 'user' => $request->user(),
+                'is_admin' => $request->user()?->hasRole('admin'),
+                'is_customer' => $request->user()?->hasRole('customer'),
+                'is_employee' => $request->user()?->hasRole('employee'),
             ],
         ];
     }

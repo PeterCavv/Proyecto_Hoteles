@@ -1,15 +1,17 @@
 <?php
 
-use App\Http\Controllers\CustomerController;
+use App\Enums\RoleEnum;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome');
-})->name('welcome');
+// Public routes
+require base_path('routes/web_public.php');
 
-Route::get('/customers', [CustomerController::class, 'index']);
+// Admin routes
+Route::middleware(['auth', 'role:'.RoleEnum::ADMIN->value])->group(function () {
+    require base_path('routes/web_admin.php');
+});
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

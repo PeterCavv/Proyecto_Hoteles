@@ -16,6 +16,12 @@ import { Link } from "@inertiajs/vue3";
                         <Link href="/customers" class="text-gray-700 hover:text-gray-900">Clientes</Link>
                         <a href="/about" class="text-gray-700 hover:text-gray-900">Acerca</a>
                         <a href="/contact" class="text-gray-700 hover:text-gray-900">Contacto</a>
+                        <Link
+                            v-if="$page.props.auth.user"
+                            href="/profile"
+                            class="text-gray-700 hover:text-gray-900">
+                            Ver Perfil
+                        </Link>
                     </div>
                 </div>
             </div>

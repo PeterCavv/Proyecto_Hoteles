@@ -13,7 +13,7 @@ return new class extends Migration {
             $table->foreignId('hotel_id')->constrained('hotels')->onDelete('cascade');
             $table->integer('rating')->default(0)->nullable();
             $table->text('review')->nullable();
-            $table->date('published_at');
+            $table->date('published_at')->default(now());
             $table->foreignId('parent_id')->nullable()->constrained('reviews')->onDelete('cascade');
             $table->timestamps();
         });

@@ -20,7 +20,7 @@ class ReservationSeeder extends Seeder
         }
 
         for ($i = 0; $i < 4; $i++) {
-            Reservation::create([
+            Reservation::factory()->create([
                 'customer_id' => $customers->random()->id,
                 'hotel_id' => $hotels->random()->id,
             ]);
