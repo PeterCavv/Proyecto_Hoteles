@@ -3,29 +3,33 @@
 namespace Tests\Feature\Auth;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+use App\Models\User;
+use Spatie\Permission\Models\Role;
+use App\Enums\RoleEnum;
 
-class RegistrationTest extends TestCase
-{
-    use RefreshDatabase;
+uses(RefreshDatabase::class);
 
-    public function test_registration_screen_can_be_rendered(): void
-    {
-        $response = $this->get('/register');
+it('can register and authenticate a new customer', function () {
+    Role::findOrCreate(RoleEnum::CUSTOMER->value);
 
-        $response->assertStatus(200);
-    }
+    $response = $this->post(route('register'), [
+        'name' => 'Test User',
+        'email' => 'testuser@example.com',
+        'password' => 'Password123!',
+        'password_confirmation' => 'Password123!',
+        'dni' => '12345678A',
+    ]);
 
-    public function test_new_users_can_register(): void
-    {
-        $response = $this->post('/register', [
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => 'password',
-            'password_confirmation' => 'password',
-        ]);
+    $response->assertRedirect(route('common.index'));
 
-        $this->assertAuthenticated();
-        $response->assertRedirect(route('dashboard', absolute: false));
-    }
-}
+    $user = User::where('email', 'testuser@example.com')->first();
+
+    expect($user)->not()->toBeNull()
+        ->and($user->name)->toBe('Test User')
+        ->and($user->hasRole(RoleEnum::CUSTOMER->value))->toBeTrue()
+        ->and($user->customer)->not()->toBeNull()
+        ->and($user->customer->dni)->toBe('12345678A');
+
+    $this->assertAuthenticatedAs($user);
+});
+

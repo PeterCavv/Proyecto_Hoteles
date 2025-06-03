@@ -98,6 +98,10 @@ const deleteAccount = () => {
         },
     });
 };
+
+const logOut = () => {
+    form.post(route('logout'));
+};
 </script>
 
 <template>
@@ -126,6 +130,14 @@ const deleteAccount = () => {
                 icon="pi pi-trash"
                 class="p-button-danger w-full"
                 @click="ifDelete = true"/>
+
+            <Button
+                v-if="$page.props.auth.user.id === user.id"
+                :label="t('messages.user_profile.log_out')"
+                icon="pi pi-trash"
+                class="p-button-secondary w-full"
+                @click="logOut"
+            />
 
             <Dialog v-model:visible="ifEdit" modal header="Editar Cuenta" :style="{ width: '50vw' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
                 <p class="m-0">

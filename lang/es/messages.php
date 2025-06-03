@@ -53,6 +53,7 @@ return [
         'dni' => 'DNI',
         'telephone' => 'Teléfono',
         'address' => 'Dirección',
+        'log_out' => 'Cerrar sesión',
     ],
     'state' => [
         'saved' => 'Guardado',
