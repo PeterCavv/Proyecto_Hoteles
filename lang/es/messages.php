@@ -32,6 +32,7 @@ return [
     ],
     'main_menu' => [
         'hotels' => 'Hoteles',
+        'attractions' => 'Turismo',
         'about' => 'Acerca',
         'contact' => 'Contacto',
         'users' => 'Usuarios',

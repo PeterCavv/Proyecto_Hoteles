@@ -1,5 +1,5 @@
 <script setup>
-import {Link, router} from "@inertiajs/vue3";
+import {Link} from "@inertiajs/vue3";
 import { useI18n } from "vue-i18n";
 import 'primeicons/primeicons.css';
 
@@ -23,6 +23,9 @@ const { t } = useI18n();
                         <a href="/about" class="text-gray-700 hover:text-gray-900">
                             {{ t('messages.main_menu.about') }}
                         </a>
+                        <Link href="/attractions" class="text-gray-700 hover:text-gray-900">
+                            {{ t('messages.main_menu.attractions') }}
+                        </Link>
                         <a href="/contact" class="text-gray-700 hover:text-gray-900">
                             {{ t('messages.main_menu.contact') }}
                         </a>

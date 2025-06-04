@@ -1,20 +1,3 @@
-<script setup>
-import { useI18n } from 'vue-i18n'
-import {Head, usePage} from "@inertiajs/vue3";
-
-const { t } = useI18n()
-const page = usePage()
-const user = page.props.auth?.user
-
-const props = defineProps({
-    canLogin: Boolean,
-    canRegister: Boolean,
-    laravelVersion: String,
-    phpVersion: String
-});
-
-</script>
-
 <template>
     <Head :title="t('messages.welcome')" />
     <div v-if="!$page.props.auth.user" class="w-full h-full min-h-screen bg-gradient-to-br from-blue-500 via-blue-100 to-blue-300 flex items-center justify-center">
@@ -33,8 +16,33 @@ const props = defineProps({
                     {{ t('messages.get_started') }}
                 </a>
             </div>
+            <div class="mt-20">
+                <Link
+                    href="/attractions"
+                    class="text-blue-600 hover:text-blue-800 text-sm underline">
+                    ¡Participa en nuestra gran colección de Atracciones Turísticas!
+                </Link>
+            </div>
         </div>
     </div>
 </template>
+
+<script setup>
+import {Link} from "@inertiajs/vue3";
+import { useI18n } from 'vue-i18n'
+import {Head, usePage} from "@inertiajs/vue3";
+
+const { t } = useI18n()
+const page = usePage()
+const user = page.props.auth?.user
+
+const props = defineProps({
+    canLogin: Boolean,
+    canRegister: Boolean,
+    laravelVersion: String,
+    phpVersion: String
+});
+
+</script>
 
 
