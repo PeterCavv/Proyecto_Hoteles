@@ -48,6 +48,9 @@ return [
     ],
     'user_profile' => [
         'user_details' => 'Detalles del Usuario',
+        'user_details_description' => 'Aquí puedes ver y editar los detalles de tu perfil.',
+        'edit_profile' => 'Editar Perfil',
+        'edit_profile_description' => 'Actualiza tu información personal y preferencias.',
         'name' => 'Nombre',
         'email' => 'Correo Electrónico',
         'dni' => 'DNI',
@@ -68,6 +71,7 @@ return [
     ],
     'deleting_account' => [
         'title' => 'Eliminar Cuenta',
+        'confirm_password' => 'Confirma tu contraseña para continuar',
         'description' => '¿Estás seguro de que deseas eliminar tu cuenta? Esta acción es irreversible.',
         'confirm' => 'Sí, eliminar mi cuenta',
         'cancel' => 'No, cancelar',

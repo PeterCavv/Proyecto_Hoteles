@@ -32,6 +32,12 @@ const form = useForm({
     password: '',
 });
 
+/**
+ * This function is used to submit the form data to update the user profile.
+ * It uses the Inertia form helper to send a PUT request to the specified route.
+ * On success, it shows a success message and closes the edit dialog.
+ * On error, it displays error messages for each validation error.
+ */
 const submitForm = () => {
     form.submit('put', route('profile.update', user.id), {
         onSuccess: () => {
@@ -44,9 +50,7 @@ const submitForm = () => {
             ifEdit.value = false;
         },
         onError: (errors) => {
-            // Recorrer todos los errores y mostrar uno por uno
             Object.values(errors).forEach((errorMessages) => {
-                // errorMessages puede ser un string o un array de strings
                 if (Array.isArray(errorMessages)) {
                     errorMessages.forEach((msg) => {
                         toast.add({
@@ -71,6 +75,11 @@ const submitForm = () => {
     });
 };
 
+/**
+ * This function is used to delete the user account.
+ * It uses the Inertia form helper to send a DELETE request to the specified route.
+ * On error, it displays error messages for each validation error.
+ */
 const deleteAccount = () => {
     form.delete(route('profile.destroy', user.id), {
         onError: (errors) => {
@@ -99,6 +108,10 @@ const deleteAccount = () => {
     });
 };
 
+/**
+ * This function is used to log out the user.
+ * It uses the Inertia form helper to send a POST request to the logout route.
+ */
 const logOut = () => {
     form.post(route('logout'));
 };
@@ -110,12 +123,22 @@ const logOut = () => {
 
     <div class="max-w-6xl mx-auto px-4 py-10">
         <div class="bg-white shadow-2xl rounded-2xl p-8 ring-1 ring-gray-200 space-y-8">
-            <h2 class="text-3xl font-extrabold text-gray-900">Perfil de Usuario</h2>
-            <p class="text-gray-600">Aquí puedes ver y editar tu perfil.</p>
+            <h2 class="text-3xl font-extrabold text-gray-900">
+                {{ t('messages.user_profile.user_details') }}
+            </h2>
+            <p class="text-gray-600">
+                {{ t('messages.user_profile.user_details_description') }}
+            </p>
             <div class="mt-6">
-                <p class="text-lg font-semibold text-gray-800">Nombre: {{ user.name }}</p>
-                <p class="text-lg font-semibold text-gray-800">Email: {{ user.email }}</p>
-                <p class="text-lg font-semibold text-gray-800">Rol: {{ user.role_name }}</p>
+                <p class="text-lg font-semibold text-gray-800">
+                    {{ t('messages.user_profile.name') }}: {{ user.name }}
+                </p>
+                <p class="text-lg font-semibold text-gray-800">
+                    {{ t('messages.user_profile.email') }}: {{ user.email }}
+                </p>
+                <p class="text-lg font-semibold text-gray-800">
+                    {{ t('messages.user_search.role') }}: {{ user.role_name }}
+                </p>
             </div>
 
             <Button
@@ -139,32 +162,58 @@ const logOut = () => {
                 @click="logOut"
             />
 
-            <Dialog v-model:visible="ifEdit" modal header="Editar Cuenta" :style="{ width: '50vw' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+            <Dialog
+                    v-model:visible="ifEdit"
+                    modal
+                    :header="t('messages.user_profile.edit_profile')"
+                    :style="{ width: '50vw' }"
+                    :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+            >
                 <p class="m-0">
-                    Aquí puedes editar tu información de perfil. Asegúrate de que todos los campos sean correctos antes de guardar.
+                    {{ t('messages.user_profile.edit_profile_description') }}
                 </p>
                 <form @submit.prevent = submitForm>
                     <div class="grid grid-cols-2 gap-4 mt-4">
                         <FloatLabel variant="on">
-                            <InputText v-model="form.name" class="w-full"/>
+                            <InputText
+                                v-model="form.name"
+                                :invalid="form.errors.name"
+                                class="w-full"
+                            />
                             <label for="on_label">{{ t('messages.user_profile.name') }}</label>
                         </FloatLabel>
                         <FloatLabel variant="on">
-                            <InputText v-model="form.email" class="w-full"/>
+                            <InputText
+                                v-model="form.email"
+                                :invalid="form.errors.email"
+                                class="w-full"
+                            />
                             <label for="on_label">{{ t('messages.user_profile.email') }}</label>
                         </FloatLabel>
                         <template v-if="user.role_name === 'customer'">
                             <FloatLabel variant="on">
-                                <InputText v-model="form.dni" class="w-full"/>
+                                <InputText
+                                    v-model="form.dni"
+                                    :invalid="form.errors.dni"
+                                    class="w-full"
+                                />
                                 <label for="on_label">{{ t('messages.user_profile.dni') }}</label>
                             </FloatLabel>
                         </template>
                         <FloatLabel variant="on">
-                            <InputText v-model="form.phone_number" class="w-full"/>
+                            <InputText
+                                v-model="form.phone_number"
+                                :invalid="form.errors.phone_number"
+                                class="w-full"
+                            />
                             <label for="on_label">{{ t('messages.user_profile.telephone') }}</label>
                         </FloatLabel>
                         <FloatLabel variant="on">
-                            <InputText v-model="form.city" class="w-full"/>
+                            <InputText
+                                v-model="form.city"
+                                :invalid="form.errors.city"
+                                class="w-full"
+                            />
                             <label for="on_label">{{ t('messages.user_profile.address') }}</label>
                         </FloatLabel>
                     </div>
@@ -194,9 +243,10 @@ const logOut = () => {
                 <form v-if="confirmPassword === true" @submit.prevent ="deleteAccount">
                     <InputText
                         v-model="form.password"
+                        :invalid="form.errors.password"
                         type="password"
                         class="w-full mt-4"
-                        placeholder="Contraseña de confirmación"
+                        :placeholder="t('messages.deleting_account.confirm_password')"
                         :aria-label="t('messages.deleting_account.confirm_password')"/>
                     <Button
                         :label="t('messages.buttons.delete')"

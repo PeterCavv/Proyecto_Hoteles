@@ -13,7 +13,7 @@ beforeEach(function () {
     Role::findOrCreate(RoleEnum::ADMIN->value);
 });
 
-it('crea un usuario admin correctamente con datos válidos', function () {
+it('creates an admin user correctly with validated data', function () {
     $exitCode = Artisan::call('create:admin', [
         'name' => 'Admin Test',
         'email' => 'admin@test.com',
@@ -33,7 +33,7 @@ it('crea un usuario admin correctamente con datos válidos', function () {
         ->and($user->hasRole('admin'))->toBeTrue();
 });
 
-it('no permite crear un admin con email ya existente', function () {
+it('forbid to create an admin with an existing email', function () {
     User::factory()->create(['email' => 'exists@test.com']);
 
     $exitCode = Artisan::call('create:admin', [
@@ -48,7 +48,7 @@ it('no permite crear un admin con email ya existente', function () {
         ->and($output)->toContain('El usuario con email exists@test.com ya existe.');
 });
 
-it('valida los datos y falla si son inválidos', function () {
+it('validate data and fail if they are invalid', function () {
     $exitCode = Artisan::call('create:admin', [
         'name' => '',
         'email' => 'not-an-email',

@@ -12,7 +12,7 @@ beforeEach(function () {
     $this->policy = new DummyPolicy();
 });
 
-it('permite al dueño gestionar su propio modelo', function () {
+it('allows to manage a user his own model', function () {
     $user = Mockery::mock(User::class)->makePartial();
     $user->id = 1;
     $user->shouldReceive('isAdmin')->andReturnFalse();
@@ -21,7 +21,7 @@ it('permite al dueño gestionar su propio modelo', function () {
     expect($this->policy->canManage($user, $model))->toBeTrue();
 });
 
-it('permite a un admin gestionar cualquier modelo', function () {
+it('allows an admin to manage every model', function () {
     $admin = Mockery::mock(User::class)->makePartial();
     $model = (object)['user_id' => 2];
 
@@ -31,7 +31,7 @@ it('permite a un admin gestionar cualquier modelo', function () {
     expect($this->policy->canManage($admin, $model))->toBeTrue();
 });
 
-it('no permite a un usuario gestionar un modelo ajeno si no es admin', function () {
+it('forbid a user to manage a foreign model if he is not an admin', function () {
     $user = Mockery::mock(User::class)->makePartial();
     $model = (object)['user_id' => 2];
 
@@ -41,7 +41,7 @@ it('no permite a un usuario gestionar un modelo ajeno si no es admin', function 
     expect($this->policy->canManage($user, $model))->toBeFalse();
 });
 
-it('no permite gestionar un modelo sin user_id', function () {
+it('forbid to manage without user_id', function () {
     $user = Mockery::mock(User::class)->makePartial();
     $model = (object)[]; // sin user_id
 
