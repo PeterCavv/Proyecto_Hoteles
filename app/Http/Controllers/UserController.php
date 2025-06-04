@@ -35,6 +35,10 @@ class UserController extends Controller
     {
         $this->authorize('update', $user);
 
+        if($request->user()->isDirty('email')) {
+            $request->user()->email_verified_at = null;
+        }
+
         $user->update($request->validated());
 
         return redirect()->route('profile.show', $user)

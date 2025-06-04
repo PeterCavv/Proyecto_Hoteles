@@ -58,3 +58,42 @@ it('has many follows', function () {
         ->and($follows->pluck('customer_id'))->toContain($customer1->id)
         ->and($follows->pluck('customer_id'))->toContain($customer2->id);
 });
+
+it('filters hotels by city', function () {
+    Hotel::factory()->create(['city' => 'New York']);
+    Hotel::factory()->create(['city' => 'Los Angeles']);
+
+    $hotels = Hotel::filter(['city' => 'New'])->get();
+
+    expect($hotels)->toHaveCount(1)
+        ->and($hotels->first()->city)->toBe('New York');
+});
+
+it('filters hotels by name', function () {
+    Hotel::factory()->create(['name' => 'Grand Plaza']);
+    Hotel::factory()->create(['name' => 'Ocean View']);
+
+    $hotels = Hotel::filter(['name' => 'Ocean'])->get();
+
+    expect($hotels)->toHaveCount(1)
+        ->and($hotels->first()->name)->toBe('Ocean View');
+});
+
+it('filters hotels by city and name combined', function () {
+    Hotel::factory()->create(['name' => 'Grand Plaza', 'city' => 'New York']);
+    Hotel::factory()->create(['name' => 'Ocean View', 'city' => 'Los Angeles']);
+    Hotel::factory()->create(['name' => 'City Center', 'city' => 'New York']);
+
+    $hotels = Hotel::filter(['city' => 'New York', 'name' => 'City'])->get();
+
+    expect($hotels)->toHaveCount(1)
+        ->and($hotels->first()->name)->toBe('City Center');
+});
+
+it('returns all hotels if no filter is applied', function () {
+    Hotel::factory()->count(3)->create();
+
+    $hotels = Hotel::filter([])->get();
+
+    expect($hotels)->toHaveCount(4);
+});

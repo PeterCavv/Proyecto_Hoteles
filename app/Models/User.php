@@ -32,12 +32,18 @@ class User extends Authenticatable
         'password',
         'avatar',
         'phone_number',
-        'city'
+        'city',
+        'email_verified_at'
     ];
 
-    protected $casts = [
-        'role' => RoleEnum::class,
-    ];
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+            'role' => RoleEnum::class,
+        ];
+    }
 
     protected $appends = ['role_name'];
 
@@ -50,19 +56,6 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
 
     public function customer(): HasOne
     {

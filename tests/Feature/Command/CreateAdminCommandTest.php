@@ -57,8 +57,6 @@ it('validate data and fail if they are invalid', function () {
 
     $output = Artisan::output();
 
-    dump($output);
-
     expect($exitCode)->toBe(1)
         ->and(
             str_contains($output, 'El campo name es obligatorio') ||

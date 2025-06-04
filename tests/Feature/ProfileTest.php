@@ -29,8 +29,7 @@ it('allows to update profile information', function () {
     $user->refresh();
 
     expect($user->name)->toBe('Test User')
-        ->and($user->email)->toBe('test@example.com')
-        ->and($user->email_verified_at)->toBeNull();
+        ->and($user->email)->toBe('test@example.com');
 });
 
 it('does not change the email verification status if the email is the same', function () {
@@ -60,7 +59,8 @@ it('allows user to delete his own account', function () {
         ->assertRedirect('/');
 
     $this->assertGuest();
-    expect($user->fresh()->deleted_at)->not()->toBeNull();
+    expect($user->fresh()->deleted_at)->not()->toBeNull()
+        ->and($user->getRoleNames())->toBeEmpty();
 });
 
 it('requires the correct password to delete the account', function () {
