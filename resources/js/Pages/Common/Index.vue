@@ -1,28 +1,3 @@
-<script setup>
-import MainLayout from "@/Layouts/MainLayout.vue";
-import { Head, router } from '@inertiajs/vue3'
-import { ref } from 'vue'
-import { useI18n } from 'vue-i18n'
-
-const { t } = useI18n()
-
-defineOptions({
-    layout: MainLayout,
-})
-
-const destination = ref('')
-const checkIn = ref('')
-const checkOut = ref('')
-
-const submitSearch = () => {
-    router.get('/hotels/search', {
-        destination: destination.value,
-        check_in: checkIn.value,
-        check_out: checkOut.value,
-    })
-}
-</script>
-
 <template>
     <Head title="Buscar hoteles" />
 
@@ -37,12 +12,26 @@ const submitSearch = () => {
                     <label class="block text-sm font-medium text-gray-700 mb-1">
                         {{ t('messages.index.destination') }}
                     </label>
-                    <input
-                        v-model="destination"
-                        type="text"
-                        class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="Ej. Buenos Aires"
-                    />
+                    <Select v-model="destination"
+                            :options="cities"
+                            filter optionLabel="destination"
+                            placeholder="Select a Country"
+                            class="w-full md:w-56"
+                    >
+                        <template #value="slotProps">
+                            <div v-if="slotProps.value" class="flex items-center">
+                                <div>{{ slotProps.value.name }}</div>
+                            </div>
+                            <span v-else>
+                                {{ slotProps.placeholder }}
+                            </span>
+                        </template>
+                        <template #option="slotProps">
+                            <div class="flex items-center">
+                                <div>{{ slotProps.option.name }}</div>
+                            </div>
+                        </template>
+                    </Select>
                 </div>
 
                 <div>
@@ -80,3 +69,36 @@ const submitSearch = () => {
         </div>
     </div>
 </template>
+
+<script setup>
+import MainLayout from "@/Layouts/MainLayout.vue";
+import { Head, router } from '@inertiajs/vue3'
+import {onMounted, ref} from 'vue'
+import { useI18n } from 'vue-i18n'
+import {useCity} from "@/Composables/useCity.js";
+import Select from "primevue/select";
+
+const { t } = useI18n()
+
+const { cities, error, fetchCities } = useCity();
+
+defineOptions({
+    layout: MainLayout,
+})
+
+const destination = ref('')
+const checkIn = ref('')
+const checkOut = ref('')
+
+const submitSearch = () => {
+    router.get('/hotels/search', {
+        destination: destination.value,
+        check_in: checkIn.value,
+        check_out: checkOut.value,
+    })
+}
+
+onMounted(() => {
+    fetchCities();
+});
+</script>
