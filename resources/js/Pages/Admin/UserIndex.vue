@@ -1,48 +1,3 @@
-<script setup>
-import {Head, router} from '@inertiajs/vue3';
-import MainLayout from "@/Layouts/MainLayout.vue";
-import 'primeicons/primeicons.css'
-import {computed, ref} from "vue";
-import InputText from 'primevue/inputtext';
-import Listbox from 'primevue/listbox';
-import Button from 'primevue/button';
-import Select from 'primevue/select';
-import IconField from 'primevue/iconfield';
-import InputIcon from 'primevue/inputicon';
-import {useI18n} from "vue-i18n";
-
-const { t } = useI18n();
-
-const props = defineProps({
-    users: Object,
-    roles: Array,
-});
-
-const roleOptions = [
-    {label: 'Todos', value: ''},
-    {label: 'Administrador', value: 'admin'},
-    {label: 'Cliente', value: 'customer'},
-    {label: 'Hotel', value: 'hotel'},
-];
-
-defineOptions({
-    name: "CustomerIndex",
-    layout: MainLayout,
-});
-
-const filterEmail = ref('')
-const filterRole = ref('')
-const selectedUser = ref(null)
-
-const filteredUsers = computed(() => {
-    return props.users.filter(user => {
-        const matchesEmail = user.email.toLowerCase().includes(filterEmail.value.toLowerCase())
-        const matchesRole = user.role_name.toLowerCase().includes(filterRole.value.toLowerCase())
-        return matchesEmail && matchesRole
-    })
-})
-</script>
-
 <template>
     <Head title="Usuarios" />
 
@@ -160,4 +115,49 @@ const filteredUsers = computed(() => {
         </div>
     </div>
 </template>
+
+<script setup>
+import {Head, router} from '@inertiajs/vue3';
+import MainLayout from "@/Layouts/MainLayout.vue";
+import 'primeicons/primeicons.css'
+import {computed, ref} from "vue";
+import InputText from 'primevue/inputtext';
+import Listbox from 'primevue/listbox';
+import Button from 'primevue/button';
+import Select from 'primevue/select';
+import IconField from 'primevue/iconfield';
+import InputIcon from 'primevue/inputicon';
+import {useI18n} from "vue-i18n";
+
+const { t } = useI18n();
+
+const props = defineProps({
+    users: Object,
+    roles: Array,
+});
+
+const roleOptions = [
+    {label: 'Todos', value: ''},
+    {label: 'Administrador', value: 'admin'},
+    {label: 'Cliente', value: 'customer'},
+    {label: 'Hotel', value: 'hotel'},
+];
+
+defineOptions({
+    name: "CustomerIndex",
+    layout: MainLayout,
+});
+
+const filterEmail = ref('')
+const filterRole = ref('')
+const selectedUser = ref(null)
+
+const filteredUsers = computed(() => {
+    return props.users.filter(user => {
+        const matchesEmail = user.email.toLowerCase().includes(filterEmail.value.toLowerCase())
+        const matchesRole = user.role_name.toLowerCase().includes(filterRole.value.toLowerCase())
+        return matchesEmail && matchesRole
+    })
+})
+</script>
 
