@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             FriendshipSeeder::class,
             RoomTypeSeeder::class,
             ReviewSeeder::class,
+            FeatureSeeder::class,
         ]);
     }
 }

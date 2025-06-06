@@ -74,7 +74,6 @@ it('allows the user to update their own profile', function () {
     $response = $this->put(route('profile.update', $user), $data);
 
     $response->assertRedirect(route('profile.show', $user));
-    $response->assertSessionHas('success', 'Profile updated successfully.');
 
     $this->assertDatabaseHas('users', [
         'id' => $user->id,
@@ -102,7 +101,6 @@ it('allows an admin to update any user profile', function () {
     $response = $this->put(route('profile.update', $user), $data);
 
     $response->assertRedirect(route('profile.show', $user));
-    $response->assertSessionHas('success', 'Profile updated successfully.');
 
     $this->assertDatabaseHas('users', [
         'id' => $user->id,

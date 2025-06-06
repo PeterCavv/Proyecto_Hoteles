@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Enums\RoleEnum;
+use App\Events\CreatedUserEvent;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
@@ -49,6 +50,7 @@ class RegisteredUserController extends Controller
             'dni' => $request->dni,
         ]);
         event(new Registered($user));
+        event(new CreatedUserEvent($user));
 
         Auth::login($user);
 

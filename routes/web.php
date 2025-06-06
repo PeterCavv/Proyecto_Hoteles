@@ -17,6 +17,11 @@ Route::middleware(['auth', 'role:'.RoleEnum::ADMIN->value])->group(function () {
     require base_path('routes/web_admin.php');
 });
 
+// Hotel routes
+Route::middleware(['auth'])->group(function (){
+    require base_path('routes/web_hotel.php');
+});
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

@@ -2,9 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\RoleEnum;
+use App\Http\Requests\Hotel\CreateHotelRequest;
+use App\Http\Requests\Hotel\HotelRequest;
 use App\Models\Hotel;
+use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class HotelController extends Controller
@@ -22,9 +28,10 @@ class HotelController extends Controller
        $validated = $request->only(['city', 'name']);
 
        $hotels = Hotel::filter($validated)
-           ->with(['features', 'reviews']);
+           ->with(['features', 'reviews'])
+           ->get();
 
-        return Inertia::render('Hotels/Index', [
+        return Inertia::render('Hotel/HotelIndex', [
             'hotels' => $hotels,
             'filters' => $validated,
         ]);
@@ -41,7 +48,7 @@ class HotelController extends Controller
     {
         $hotel->load(['features', 'reviews.user']);
 
-        return Inertia::render('Hotels/Show', [
+        return Inertia::render('Hotel/HotelShow', [
             'hotel' => $hotel,
         ]);
     }
@@ -53,7 +60,7 @@ class HotelController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Hotels/Create');
+        return Inertia::render('Hotel/HotelCreate');
     }
 
     /**
@@ -62,11 +69,28 @@ class HotelController extends Controller
      * @param \App\Http\Requests\HotelRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(HotelRequest $request)
+    public function store(CreateHotelRequest $request)
     {
         $validated = $request->validated();
 
-        $hotel = Hotel::create($validated);
+        $user = User::create([
+            'name' => $validated['user_name'],
+            'email' => $validated['email_name'],
+            'phone_number' => $validated['phone_number'],
+            'city' => $validated['user_city'],
+            'password' => Hash::make(Str::random(12)),
+        ]);
+
+        $user->assignRole(RoleEnum::HOTEL->value);
+
+        $hotel = Hotel::create([
+            'name' => $validated['name'],
+            'description' => $validated['description'],
+            'location' => $validated['location'],
+            'city' => $validated['city'],
+            'postal_code' => $validated['postal_code'],
+            'user_id' => $user->id,
+        ]);
 
         return redirect()->route('hotels.show', $hotel)
             ->with('success', 'Hotel created successfully.');
@@ -81,5 +105,18 @@ class HotelController extends Controller
         $hotel->update($validated);
 
         return redirect()->route('hotels.show', $hotel);
+    }
+
+    public function delete(Hotel $hotel)
+    {
+        $this->authorize('delete', $hotel);
+        $user = User::findOrFail($hotel->user_id);
+
+        $hotel->delete();
+
+        $user->syncRoles();
+        $user->delete();
+
+        return redirect()->route('welcome');
     }
 }

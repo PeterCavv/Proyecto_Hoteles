@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Model;
 
+use App\Enums\RoleEnum;
 use App\Models\Customer;
 use App\Models\Hotel;
 use App\Models\Like;
@@ -84,4 +85,52 @@ it('can detect if it is a customer or hotel owner', function () {
     $this->user->refresh();
     expect($this->user->isHotel())->toBeTrue();
 });
+
+it('detects if the user is admin', function () {
+    Role::findOrCreate(RoleEnum::ADMIN->value);
+    $this->user->assignRole(RoleEnum::ADMIN->value);
+    $this->user->refresh();
+
+    expect($this->user->isAdmin())->toBeTrue();
+});
+
+
+it('returns the correct role name attribute', function () {
+    Role::findOrCreate(RoleEnum::ADMIN->value);
+    $this->user->assignRole(RoleEnum::ADMIN->value);
+    $this->user->refresh();
+
+    expect($this->user->role_name)->toBe('admin');
+});
+
+it('can block and unblock a collection of users', function () {
+    $users = User::factory()->count(2)->create();
+    $this->user->block($users);
+    $this->user->refresh();
+
+    expect($this->user->blockedFriends->pluck('id'))->toContain($users[0]->id)
+        ->and($this->user->blockedFriends->pluck('id'))->toContain($users[1]->id);
+
+    $this->user->unblock($users);
+    $this->user->refresh();
+
+    expect($this->user->blockedFriends)->toHaveCount(0);
+});
+
+it('can block and unblock users from an array of ids', function () {
+    $users = User::factory()->count(2)->create();
+    $arrayOfUsers = $users->map(fn($u) => ['id' => $u->id])->toArray();
+
+    $this->user->block($arrayOfUsers);
+    $this->user->refresh();
+
+    expect($this->user->blockedFriends->pluck('id'))->toContain($users[0]->id)
+        ->and($this->user->blockedFriends->pluck('id'))->toContain($users[1]->id);
+
+    $this->user->unblock($arrayOfUsers);
+    $this->user->refresh();
+
+    expect($this->user->blockedFriends)->toHaveCount(0);
+});
+
 

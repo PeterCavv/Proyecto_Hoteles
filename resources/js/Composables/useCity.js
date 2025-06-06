@@ -5,6 +5,10 @@ export function useCity() {
     const cities = ref([]);
     const error = ref(null);
 
+    /**
+     * This function is used to fetch all the cities.
+     * @returns {Promise<void>}
+     */
     const fetchCities = async () => {
         error.value = null;
         try {

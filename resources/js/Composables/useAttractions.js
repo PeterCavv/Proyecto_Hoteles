@@ -5,6 +5,10 @@ export function useAttractions() {
     const attractions = ref([]);
     const error = ref(null);
 
+    /**
+     * This function is used to fetch all the attractions.
+     * @returns {Promise<void>}
+     */
     const fetchAttractions = async () => {
         error.value = null;
         try {

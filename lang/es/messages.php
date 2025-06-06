@@ -77,4 +77,8 @@ return [
         'confirm' => 'Sí, eliminar mi cuenta',
         'cancel' => 'No, cancelar',
     ],
+    'hotels' => [
+        'head' => 'Buscar Hotel',
+        'title' => 'Resultados de la búsqueda '
+    ]
 ];

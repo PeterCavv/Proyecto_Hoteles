@@ -53,4 +53,49 @@ it('denies update if the hotel has no user_id', function () {
     expect($this->policy->update($user, $hotel))->toBeFalse();
 });
 
+it('allows a user to delete their own hotel', function () {
+    $user = Mockery::mock(User::class)->makePartial();
+    $user->id = 1;
+    $user->shouldReceive('isAdmin')->andReturnFalse();
+
+    $hotel = Mockery::mock(Hotel::class)->makePartial();
+    $hotel->user_id = 1;
+
+    expect($this->policy->delete($user, $hotel))->toBeTrue();
+});
+
+it('allows an admin to delete any hotel', function () {
+    $admin = Mockery::mock(User::class)->makePartial();
+    $admin->id = 99;
+    $admin->shouldReceive('isAdmin')->andReturnTrue();
+
+    $hotel = Mockery::mock(Hotel::class)->makePartial();
+    $hotel->user_id = 1;
+
+    expect($this->policy->delete($admin, $hotel))->toBeTrue();
+});
+
+it('denies a user from deleting someone else\'s hotel if not admin', function () {
+    $user = Mockery::mock(User::class)->makePartial();
+    $user->id = 1;
+    $user->shouldReceive('isAdmin')->andReturnFalse();
+
+    $hotel = Mockery::mock(Hotel::class)->makePartial();
+    $hotel->user_id = 2;
+
+    expect($this->policy->delete($user, $hotel))->toBeFalse();
+});
+
+it('denies delete if the hotel has no user_id', function () {
+    $user = Mockery::mock(User::class)->makePartial();
+    $user->id = 1;
+    $user->shouldReceive('isAdmin')->andReturnFalse();
+
+    $hotel = Mockery::mock(Hotel::class)->makePartial();
+    unset($hotel->user_id);
+
+    expect($this->policy->delete($user, $hotel))->toBeFalse();
+});
+
+
 

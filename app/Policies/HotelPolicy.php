@@ -15,4 +15,9 @@ class HotelPolicy
     {
         return $this->canManage($user, $hotel);
     }
+
+    public function delete(User $user, Hotel $hotel): bool
+    {
+        return $this->canManage($user, $hotel);
+    }
 }
