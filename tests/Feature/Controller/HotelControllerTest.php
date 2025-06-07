@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\RoleEnum;
+use App\Models\Feature;
 use App\Models\Hotel;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -105,5 +106,25 @@ it('deletes a hotel and its user', function () {
     $response->assertRedirect(route('welcome'));
     $this->assertModelMissing($hotel);
     $this->assertSoftDeleted($user);
+});
+
+it('can add features to hotel', function () {
+    $hotelUser = User::factory()->create();
+    $hotelUser->assignRole(RoleEnum::HOTEL->value);
+    $features = Feature::factory()->count(3)->create();
+
+    $hotel = Hotel::factory()->for($hotelUser)->create();
+
+    $featureIds = $features->pluck('id')->toArray();
+
+    $response = $this->put(route('hotels.add-features', $hotel), [
+        'features' => $featureIds,
+    ]);
+
+    $response->assertRedirect();
+
+    foreach ($featureIds as $id) {
+        expect($hotel->features()->where('feature_id', $id)->exists())->toBeTrue();
+    }
 });
 

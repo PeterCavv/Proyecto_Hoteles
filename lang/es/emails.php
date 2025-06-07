@@ -31,6 +31,7 @@ return [
         'guests' => 'Huéspedes',
         'price' => 'Precio',
         'thank_you' => '¡Gracias por elegirnos!',
+        'title_pdf' => 'reserva-'
     ],
     'hotel_reservation_notification' => [
         'subject' => 'Nueva reserva en tu hotel',
@@ -42,6 +43,20 @@ return [
         'guests' => 'Huéspedes',
         'price' => 'Precio',
         'thank_you' => 'Gracias por tu atención.',
+    ],
+    'pdf_reservation' => [
+        'title' => 'Reserva #:id',
+        'customer' => 'Cliente',
+        'hotel' => 'Hotel',
+        'room_type' => 'Tipo de habitación',
+        'check_in' => 'Fecha de entrada',
+        'check_out' => 'Fecha de salida',
+        'adults' => 'Adultos',
+        'children' => 'Niños',
+        'price' => 'Precio',
+        'currency' => 'EUR',
+        'footer' => 'Gracias por elegirnos.',
+        'hotel_features' => 'Características del Hotel'
     ],
 
 ];

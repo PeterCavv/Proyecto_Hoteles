@@ -34,7 +34,7 @@ class HotelController extends Controller
            ->get();
 
         return Inertia::render('Hotel/HotelIndex', [
-            'hotels' => $hotels,
+            'hotels' => $hotels->load('features'),
             'filters' => $validated,
         ]);
     }
@@ -131,5 +131,24 @@ class HotelController extends Controller
         $user->delete();
 
         return redirect()->route('welcome');
+    }
+
+    /**
+     * Associates a list of features with the specified hotel.
+     *
+     * @param Request $request The request object containing the validated feature data.
+     * @param Hotel $hotel The hotel model to which the features will be linked.
+     * @return RedirectResponse Redirects back to the previous page with a success message after adding features.
+     */
+    public function addFeatures(Request $request, Hotel $hotel): RedirectResponse
+    {
+        $data = $request->validate([
+            'features' => 'required|array',
+            'features.*' => 'exists:features,id',
+        ]);
+
+        $hotel->features()->sync($data['features']);
+
+        return redirect()->route('hotels.show', $hotel);
     }
 }

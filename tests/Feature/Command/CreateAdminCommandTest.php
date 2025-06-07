@@ -23,7 +23,7 @@ it('creates an admin user correctly with validated data', function () {
     $output = Artisan::output();
 
     expect($exitCode)->toBe(0)
-        ->and($output)->toContain("Usuario admin 'Admin Test' creado correctamente.");
+        ->and($output)->toContain(__('commands.create_admin.created', ['name' => 'Admin Test']));
 
     $user = User::where('email', 'admin@test.com')->first();
 
@@ -33,7 +33,7 @@ it('creates an admin user correctly with validated data', function () {
         ->and($user->hasRole('admin'))->toBeTrue();
 });
 
-it('forbid to create an admin with an existing email', function () {
+it('forbids creating an admin with an existing email', function () {
     User::factory()->create(['email' => 'exists@test.com']);
 
     $exitCode = Artisan::call('create:admin', [
@@ -45,10 +45,10 @@ it('forbid to create an admin with an existing email', function () {
     $output = Artisan::output();
 
     expect($exitCode)->toBe(1)
-        ->and($output)->toContain('El usuario con email exists@test.com ya existe.');
+        ->and($output)->toContain(__('commands.create_admin.user_exists', ['email' => 'exists@test.com']));
 });
 
-it('validate data and fail if they are invalid', function () {
+it('validates data and fails if they are invalid', function () {
     $exitCode = Artisan::call('create:admin', [
         'name' => '',
         'email' => 'not-an-email',
@@ -58,18 +58,9 @@ it('validate data and fail if they are invalid', function () {
     $output = Artisan::output();
 
     expect($exitCode)->toBe(1)
-        ->and(
-            str_contains($output, 'El campo name es obligatorio') ||
-            str_contains($output, 'El campo nombre es requerido')
-        )->toBeTrue()
-        ->and(
-            str_contains($output, 'El campo email es requerido') ||
-            str_contains($output, 'El campo email no es un correo válido')
-        )->toBeTrue()
-        ->and(
-            str_contains($output, 'El campo password debe contener al menos 8 caracteres') ||
-            str_contains($output, 'El campo password debe tener al menos 8 caracteres')
-        )->toBeTrue();
+        ->and(str_contains($output, __('validation.required', ['attribute' => 'name'])))
+        ->and(str_contains($output, __('validation.email', ['attribute' => 'email'])))
+        ->and(str_contains($output, __('validation.min.string', ['attribute' => 'password', 'min' => 8])));
 });
 
 

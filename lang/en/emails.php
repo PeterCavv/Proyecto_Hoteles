@@ -43,5 +43,19 @@ return [
         'price' => 'Price',
         'thank_you' => 'Thank you for your attention.',
     ],
+    'pdf_reservation' => [
+        'title' => 'Reservation #:id',
+        'customer' => 'Customer',
+        'hotel' => 'Hotel',
+        'room_type' => 'Room Type',
+        'check_in' => 'Check-in Date',
+        'check_out' => 'Check-out Date',
+        'adults' => 'Adults',
+        'children' => 'Children',
+        'price' => 'Price',
+        'currency' => 'EUR',
+        'footer' => 'Thank you for choosing us.',
+        'hotel_features' => 'Hotel Features'
+    ],
 ];
 

@@ -14,16 +14,23 @@ class CreateAdminCommand extends Command
                             {email? : Email del usuario}
                             {password? : Contraseña}';
 
-    protected $description = 'Create a new admin user with the specified name, email, and password.';
+    protected $description;
 
-    public function handle()
+    public function __construct()
     {
-        $name = $this->argument('name') ?? $this->ask('What is the admin name?');
-        $email = $this->argument('email') ?? $this->ask('What is the admin email?');
-        $password = $this->argument('password') ?? $this->ask('What is the admin password?');
+        parent::__construct();
+
+        $this->description = __('commands.create_admin.description');
+    }
+
+    public function handle(): int
+    {
+        $name = $this->argument('name') ?? $this->ask(__('commands.create_admin.ask.name'));
+        $email = $this->argument('email') ?? $this->ask(__('commands.create_admin.ask.email'));
+        $password = $this->argument('password') ?? $this->ask(__('commands.create_admin.ask.password'));
 
         if (User::where('email', $email)->exists()) {
-            $this->error("El usuario con email {$email} ya existe.");
+            $this->error(__('commands.create_admin.user_exists', ['email' => $email]));
             return 1;
         }
 
@@ -32,9 +39,9 @@ class CreateAdminCommand extends Command
             'email' => $email,
             'password' => $password,
         ], [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'string', 'min:8'],
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email',
+            'password' => 'required|string|min:8',
         ]);
 
         if ($validator->fails()) {
@@ -52,7 +59,7 @@ class CreateAdminCommand extends Command
 
         $user->assignRole('admin');
 
-        $this->info("Usuario admin '{$name}' creado correctamente.");
+        $this->info(__('commands.create_admin.created', ['name' => $name]));
         return 0;
     }
 }

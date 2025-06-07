@@ -60,6 +60,8 @@ it('has many follows', function () {
 });
 
 it('filters hotels by city', function () {
+    Hotel::query()->delete();
+
     Hotel::factory()->create(['city' => 'New York']);
     Hotel::factory()->create(['city' => 'Los Angeles']);
 
