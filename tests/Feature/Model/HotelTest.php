@@ -12,7 +12,7 @@ use Tests\TestCase;
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
-    $this->user = User::factory()->create();
+    $this->user = User::factory()->create(['city' => 'Test']);
     $this->hotel = Hotel::factory()->create();
 });
 

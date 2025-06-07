@@ -21,4 +21,27 @@ return [
         'button' => 'Iniciar sesión',
         'thanks' => '¡Gracias por registrarte!',
     ],
+    'reservation_confirmation' => [
+        'subject' => 'Confirmación de Reserva',
+        'greeting' => 'Hola :name,',
+        'body' => 'Gracias por reservar con nosotros. Aquí están los detalles de tu reserva:',
+        'hotel' => 'Hotel',
+        'check_in' => 'Fecha de entrada',
+        'check_out' => 'Fecha de salida',
+        'guests' => 'Huéspedes',
+        'price' => 'Precio',
+        'thank_you' => '¡Gracias por elegirnos!',
+    ],
+    'hotel_reservation_notification' => [
+        'subject' => 'Nueva reserva en tu hotel',
+        'greeting' => 'Hola, :hotel',
+        'body' => 'Se ha realizado una nueva reserva en tu hotel con los siguientes detalles:',
+        'customer' => 'Cliente',
+        'check_in' => 'Fecha de entrada',
+        'check_out' => 'Fecha de salida',
+        'guests' => 'Huéspedes',
+        'price' => 'Precio',
+        'thank_you' => 'Gracias por tu atención.',
+    ],
+
 ];

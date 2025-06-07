@@ -14,7 +14,7 @@ class CityController extends Controller
 
     public function index()
     {
-        return City::all();
+        return response()->json(City::all());
     }
 
     public function store(CityRequest $request)

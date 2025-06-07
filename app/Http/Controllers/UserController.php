@@ -10,6 +10,7 @@ class UserController extends Controller
 {
     use AuthorizesRequests;
 
+
     public function index()
     {
         $this->authorize('index', User::class);
