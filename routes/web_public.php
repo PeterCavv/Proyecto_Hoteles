@@ -12,9 +12,13 @@ Route::get('/', function () {
     return Inertia::render('Welcome');
 })->name('welcome');
 
+// Attractions
+
 Route::get('/attractions', function () {
     return Inertia::render('Attractions');
 });
+
+// Hotels
 
 Route::get('/hotels/create', [HotelController::class, 'create'])
     ->name('hotels.create');

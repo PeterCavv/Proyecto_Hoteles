@@ -79,6 +79,8 @@ return [
     ],
     'hotels' => [
         'head' => 'Buscar Hotel',
-        'title' => 'Resultados de la búsqueda '
+        'title' => 'Resultados de la búsqueda ',
+        'features' => 'Características',
+        'feature' => 'Característica '
     ]
 ];

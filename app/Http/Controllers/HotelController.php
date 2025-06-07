@@ -8,20 +8,22 @@ use App\Http\Requests\Hotel\HotelRequest;
 use App\Models\Hotel;
 use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class HotelController extends Controller
 {
     use AuthorizesRequests;
 
     /**
-     * Display a listing of the hotels.
+     * Display a listing of hotels with optional filtering.
      *
-     * @param Request $request
-     * @return \Inertia\Response
+     * @param Request $request The request containing data to filter.
+     * @return Response The rendered Inertia component with all feature data.
      */
     public function index(Request $request)
     {
@@ -37,12 +39,11 @@ class HotelController extends Controller
         ]);
     }
 
-
     /**
-     * Display the specified hotel.
+     * Display the specified hotel details.
      *
-     * @param Hotel $hotel
-     * @return \Inertia\Response
+     * @param Hotel $hotel The hotel instance to be displayed.
+     * @return Response The rendered Inertia component with feature data.
      */
     public function show(Hotel $hotel)
     {
@@ -56,7 +57,7 @@ class HotelController extends Controller
     /**
      * Show the form for creating a new hotel.
      *
-     * @return \Inertia\Response
+     * @return Response The rendered Inertia component for hotel creation.
      */
     public function create()
     {
@@ -64,10 +65,10 @@ class HotelController extends Controller
     }
 
     /**
-     * Store a newly created hotel in storage.
+     * Handles the creation of a new hotel and its associated user.
      *
-     * @param \App\Http\Requests\HotelRequest $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param CreateHotelRequest $request The request object containing the validated data for creating a hotel.
+     * @return RedirectResponse Redirects to the hotel's show route with a success message upon successful creation.
      */
     public function store(CreateHotelRequest $request)
     {
@@ -96,6 +97,13 @@ class HotelController extends Controller
             ->with('success', 'Hotel created successfully.');
     }
 
+    /**
+     * Updates the specified hotel's information.
+     *
+     * @param HotelRequest $request The request object containing the validated data for updating the hotel.
+     * @param Hotel $hotel The hotel instance to be updated.
+     * @return RedirectResponse Redirects to the hotel's show route after a successful update.
+     */
     public function update(HotelRequest $request, Hotel $hotel)
     {
         $this->authorize('update', $hotel);
@@ -107,6 +115,11 @@ class HotelController extends Controller
         return redirect()->route('hotels.show', $hotel);
     }
 
+    /**
+     * Deletes a specified hotel and its associated user.
+     *
+     * @param Hotel $hotel The hotel instance to be deleted
+     */
     public function delete(Hotel $hotel)
     {
         $this->authorize('delete', $hotel);
