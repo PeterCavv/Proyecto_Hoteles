@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Events\CreateReservationEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Reservation\ReservationRequest;
 use App\Models\Reservation;
@@ -55,6 +56,9 @@ class ReservationController extends Controller
     public function store(ReservationRequest $request)
     {
         $reservation = Reservation::create($request->validated());
+
+        event(new CreateReservationEvent($reservation));
+
         return response()->json($reservation, 201);
     }
 

@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\CreateReservationEvent;
-use App\Mail\NewUserAlertMail;
+use App\Mail\NewAlertHotelMail;
 use Illuminate\Support\Facades\Mail;
 
 class NotifyReservationToHotelListener

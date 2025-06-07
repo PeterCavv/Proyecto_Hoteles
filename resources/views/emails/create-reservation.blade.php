@@ -11,8 +11,8 @@
 
     <ul>
         <li><strong>{{ __('emails.reservation_confirmation.hotel') }}:</strong> {{ $reservation->hotel->name }}</li>
-        <li><strong>{{ __('emails.reservation_confirmation.check_in') }}:</strong> {{ $reservation->check_in->format('Y-m-d') }}</li>
-        <li><strong>{{ __('emails.reservation_confirmation.check_out') }}:</strong> {{ $reservation->check_out->format('Y-m-d') }}</li>
+        <li><strong>{{ __('emails.reservation_confirmation.check_in') }}:</strong> {{ $reservation->check_in }}</li>
+        <li><strong>{{ __('emails.reservation_confirmation.check_out') }}:</strong> {{ $reservation->check_out }}</li>
         <li><strong>{{ __('emails.reservation_confirmation.guests') }}:</strong> {{ $reservation->adults + $reservation->children }}</li>
         <li><strong>{{ __('emails.reservation_confirmation.price') }}:</strong> ${{ number_format($reservation->price, 2) }}</li>
     </ul>

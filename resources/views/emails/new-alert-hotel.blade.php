@@ -11,8 +11,8 @@
 
     <ul>
         <li><strong>{{ __('emails.hotel_reservation_notification.customer') }}:</strong> {{ $reservation->customer->user->name }}</li>
-        <li><strong>{{ __('emails.hotel_reservation_notification.check_in') }}:</strong> {{ $reservation->check_in->format('Y-m-d') }}</li>
-        <li><strong>{{ __('emails.hotel_reservation_notification.check_out') }}:</strong> {{ $reservation->check_out->format('Y-m-d') }}</li>
+        <li><strong>{{ __('emails.hotel_reservation_notification.check_in') }}:</strong> {{ $reservation->check_in }}</li>
+        <li><strong>{{ __('emails.hotel_reservation_notification.check_out') }}:</strong> {{ $reservation->check_out }}</li>
         <li><strong>{{ __('emails.hotel_reservation_notification.guests') }}:</strong> {{ $reservation->adults + $reservation->children }}</li>
         <li><strong>{{ __('emails.hotel_reservation_notification.price') }}:</strong> ${{ number_format($reservation->price, 2) }}</li>
     </ul>

@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Mail\CreatedUserConfirmationMail;
+use App\Mail\CreateReservationMail;
 use App\Models\Reservation;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -22,6 +23,6 @@ class SendReservationEmailJob implements ShouldQueue
     public function handle(): void
     {
         Mail::to($this->reservation->customer->user->email)
-            ->send(new CreatedUserConfirmationMail($this->reservation));
+            ->send(new CreateReservationMail($this->reservation));
     }
 }
