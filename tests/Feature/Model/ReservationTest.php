@@ -37,3 +37,48 @@ it('belongs to a hotel', function () {
     expect($this->reservation->hotel)->toBeInstanceOf(Hotel::class)
         ->and($this->reservation->hotel->id)->toBe($this->hotel->id);
 });
+
+it('filters reservations by customer name, email, hotel city and price', function () {
+    Reservation::query()->delete();
+
+    $user1 = User::factory()->create(['name' => 'John Doe', 'email' => 'john@example.com']);
+    $customer1 = Customer::factory()->create(['user_id' => $user1->id]);
+    $hotel1 = Hotel::factory()->create(['city' => 'New York']);
+
+    Reservation::factory()->create([
+        'customer_id' => $customer1->id,
+        'hotel_id' => $hotel1->id,
+        'price' => 100,
+    ]);
+
+    $user2 = User::factory()->create(['name' => 'Jane Smith', 'email' => 'jane@example.com']);
+    $customer2 = Customer::factory()->create(['user_id' => $user2->id]);
+    $hotel2 = Hotel::factory()->create(['city' => 'Los Angeles']);
+
+    Reservation::factory()->create([
+        'customer_id' => $customer2->id,
+        'hotel_id' => $hotel2->id,
+        'price' => 200,
+    ]);
+
+    $reservations = Reservation::filter(['customer_name' => 'John'])->get();
+    expect($reservations)->toHaveCount(1)
+        ->and($reservations->first()->customer->user->name)->toBe('John Doe');
+
+    $reservations = Reservation::filter(['customer_email' => 'jane@example.com'])->get();
+    expect($reservations)->toHaveCount(1)
+        ->and($reservations->first()->customer->user->email)->toBe('jane@example.com');
+
+    $reservations = Reservation::filter(['hotel_city' => 'New York'])->get();
+    expect($reservations)->toHaveCount(1)
+        ->and($reservations->first()->hotel->city)->toBe('New York');
+
+    $reservations = Reservation::filter(['min_price' => 150])->get();
+    expect($reservations)->toHaveCount(1)
+        ->and($reservations->first()->price)->toBe(200);
+
+    $reservations = Reservation::filter(['max_price' => 150])->get();
+    expect($reservations)->toHaveCount(1)
+        ->and($reservations->first()->price)->toBe(100);
+});
+

@@ -25,26 +25,53 @@ class Hotel extends Model
         'rating'
     ];
 
+    /**
+     * Define a relationship to the User model.
+     *
+     * @return BelongsTo
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Define a many-to-many relationship with the Feature model.
+     *
+     * @return BelongsToMany
+     */
     public function features(): BelongsToMany
     {
         return $this->belongsToMany(Feature::class, 'hotel_features');
     }
 
+    /**
+     * Define a one-to-many relationship with the Review model.
+     *
+     * @return HasMany
+     */
     public function reviews(): HasMany
     {
         return $this->hasMany(Review::class);
     }
 
+    /**
+     * Define a one-to-many relationship with the Follow model.
+     *
+     * @return HasMany
+     */
     public function follows(): HasMany
     {
         return $this->hasMany(Follow::class);
     }
 
+    /**
+     * Scope a query to filter results based on the provided filters.
+     *
+     * @param Builder $query The query builder instance.
+     * @param array $filters Associative array of filters, where keys represent column names and values represent filter criteria.
+     * @return Builder The modified query builder instance.
+     */
     public function scopeFilter(Builder $query, array $filters): Builder
     {
         if (!empty($filters['city'])) {
