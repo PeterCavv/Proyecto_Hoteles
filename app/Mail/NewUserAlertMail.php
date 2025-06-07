@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class CreatedUserConfirmationMail extends Mailable implements ShouldQueue
+class NewUserAlertMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -21,7 +21,10 @@ class CreatedUserConfirmationMail extends Mailable implements ShouldQueue
 
     public function build()
     {
-        return $this->subject(__('emails.confirmation_user.subject'))
-            ->view('emails.users.created-user-confirmation');
+        return $this->subject(__('emails.new_user.subject'))
+            ->markdown('emails.users.new-user-alert')
+            ->with([
+                'user' => $this->user,
+            ]);
     }
 }

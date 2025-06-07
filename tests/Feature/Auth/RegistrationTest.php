@@ -10,6 +10,7 @@ use App\Enums\RoleEnum;
 uses(RefreshDatabase::class);
 
 it('can register and authenticate a new customer', function () {
+    Role::findOrCreate(RoleEnum::ADMIN->value);
     Role::findOrCreate(RoleEnum::CUSTOMER->value);
 
     $response = $this->post(route('register'), [
