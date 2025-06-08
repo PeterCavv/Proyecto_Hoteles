@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\HotelController;
+use App\Http\Controllers\Public\HotelController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 

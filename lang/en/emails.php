@@ -52,10 +52,11 @@ return [
         'check_out' => 'Check-out Date',
         'adults' => 'Adults',
         'children' => 'Children',
-        'price' => 'Price',
-        'currency' => 'EUR',
-        'footer' => 'Thank you for choosing us.',
-        'hotel_features' => 'Hotel Features'
+        'price' => 'Total Price',
+        'currency' => '€',
+        'hotel_features' => 'Hotel Features',
+        'footer' => 'Thank you for choosing our service.',
+        'qr_text' => 'Scan the code to view your reservation online',
     ],
 ];
 

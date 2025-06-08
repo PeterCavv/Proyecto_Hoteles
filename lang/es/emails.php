@@ -53,10 +53,10 @@ return [
         'check_out' => 'Fecha de salida',
         'adults' => 'Adultos',
         'children' => 'Niños',
-        'price' => 'Precio',
-        'currency' => 'EUR',
-        'footer' => 'Gracias por elegirnos.',
-        'hotel_features' => 'Características del Hotel'
+        'price' => 'Precio total',
+        'currency' => '€',
+        'hotel_features' => 'Características del hotel',
+        'footer' => 'Gracias por confiar en nuestro servicio.',
+        'qr_text' => 'Escanea el código para ver tu reserva en línea',
     ],
-
 ];

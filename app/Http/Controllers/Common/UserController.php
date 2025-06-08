@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Common;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -9,19 +10,6 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class UserController extends Controller
 {
     use AuthorizesRequests;
-
-
-    public function index()
-    {
-        $this->authorize('index', User::class);
-
-        $users = User::all()->load('customer');
-
-        return inertia('Admin/UserIndex', [
-            'users' => $users,
-            'role' => auth()->user() ? auth()->user()->getRoleNames() : [],
-        ]);
-    }
 
     public function show(User $user)
     {

@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\Admin\ImpersonationController;
-use App\Http\Controllers\HotelController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Common\HotelController;
+use App\Http\Controllers\Common\ProfileController;
+use App\Http\Controllers\Common\UserController;
 use Inertia\Inertia;
 
 Route::get('/index', function () {
