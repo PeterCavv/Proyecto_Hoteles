@@ -13,13 +13,37 @@ beforeEach(function () {
     $this->actingAs($this->user);
 });
 
-it('returns all attractions on index', function () {
-    Attraction::factory()->count(3)->create(['city_id' => $this->city->id]);
+it('returns filtered attractions on index', function () {
+    $city1 = City::factory()->create(['name' => 'Madrid']);
+    $city2 = City::factory()->create(['name' => 'Barcelona']);
+
+    Attraction::factory()->create([
+        'city_id' => $city1->id,
+        'name' => 'Parque Retiro',
+    ]);
+    Attraction::factory()->create([
+        'city_id' => $city1->id,
+        'name' => 'Museo Prado',
+    ]);
+
+    Attraction::factory()->create([
+        'city_id' => $city2->id,
+        'name' => 'La Sagrada Familia',
+    ]);
 
     $response = $this->getJson(route('attractions.index'));
+    $response->assertOk()->assertJsonCount(3);
 
+    $response = $this->getJson(route('attractions.index', ['city' => 'Madrid']));
     $response->assertOk()
-        ->assertJsonCount(3);
+        ->assertJsonCount(2)
+        ->assertJsonFragment(['name' => 'Parque Retiro'])
+        ->assertJsonFragment(['name' => 'Museo Prado']);
+
+    $response = $this->getJson(route('attractions.index', ['name' => 'Sagrada']));
+    $response->assertOk()
+        ->assertJsonCount(1)
+        ->assertJsonFragment(['name' => 'La Sagrada Familia']);
 });
 
 it('returns a single attraction on show', function () {

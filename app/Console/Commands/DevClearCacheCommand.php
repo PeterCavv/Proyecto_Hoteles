@@ -15,6 +15,6 @@ class DevClearCacheCommand extends Command
         $this->call('route:clear');
         $this->call('view:clear');
 
-        $this->info(__('coomands.dev_clear_cache'));
+        $this->info(__('commands.dev_clear_cache'));
     }
 }

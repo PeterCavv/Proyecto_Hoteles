@@ -5,12 +5,17 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Attraction\AttractionRequest;
 use App\Models\Attraction;
+use Illuminate\Http\Request;
 
 class AttractionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return Attraction::with('city')->get();
+        $attractions = Attraction::with('city')
+        ->filter($request->only(['city', 'name']))
+        ->get();
+
+        return response()->json($attractions);
     }
 
     public function show(Attraction $attraction)

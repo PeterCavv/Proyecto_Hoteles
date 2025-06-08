@@ -16,3 +16,23 @@ it('belongs to a city', function () {
         ->and($this->attraction->city->id)->toBe($this->city->id);
 });
 
+it('can filter attractions by city name and name of the attraction', function () {
+    $madrid = City::factory()->create(['name' => 'Madrid']);
+    $barcelona = City::factory()->create(['name' => 'Barcelona']);
+
+    $attractionMadrid = Attraction::factory()->create([
+        'name' => 'Museo del Prado',
+        'city_id' => $madrid->id,
+    ]);
+
+    $attractionBarcelona = Attraction::factory()->create([
+        'name' => 'Parc Güell',
+        'city_id' => $barcelona->id,
+    ]);
+
+    $filtered = Attraction::filter(['city' => 'Madrid', 'name' => 'Museo'])->get();
+
+    expect($filtered)->toHaveCount(1)
+        ->and($filtered->first()->id)->toBe($attractionMadrid->id);
+});
+
