@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\AttractionType;
 use App\Models\Attraction;
 use App\Models\City;
 use App\Models\User;
@@ -59,6 +60,7 @@ it('stores a new attraction', function () {
     $payload = [
         'name' => 'New Attraction',
         'description' => 'Somewhere nice',
+        'type' => AttractionType::FREE->value,
         'city_id' => $this->city->id,
     ];
 
@@ -71,11 +73,15 @@ it('stores a new attraction', function () {
 });
 
 it('updates an attraction', function () {
-    $attraction = Attraction::factory()->create(['city_id' => $this->city->id]);
+    $attraction = Attraction::factory()->create([
+        'city_id' => $this->city->id,
+        'type' => AttractionType::FREE->value,
+    ]);
 
     $payload = [
         'name' => 'Updated Name',
         'description' => 'Updated Desc',
+        'type' => AttractionType::PAY->value,
         'city_id' => $this->city->id,
     ];
 

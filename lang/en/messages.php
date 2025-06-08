@@ -5,6 +5,7 @@ return [
     'welcome' => 'Welcome to HotelFinder!',
     'description' => 'Explore, compare, and book hotels around the world with ease and confidence.',
     'get_started' => 'Get Started Now',
+    'attraction_link' => 'Participate in our collection of Tourist Attractions!',
     'impersonating_warning_1' => 'You are impersonating ',
     'buttons' => [
         'delete' => 'Delete',
@@ -72,4 +73,41 @@ return [
         'confirm' => 'Yes, delete my account',
         'cancel' => 'No, cancel',
     ],
+    "common" => [
+        "back" => "Back",
+        'search' => 'Buscar',
+        'save' => 'Save',
+    ],
+    "messages" => [
+        'title' => 'Tourist Attractions',
+        "main_menu" => [
+            "attractions" => "Tourist Attractions"
+        ]
+    ],
+    "attractions" => [
+        "search" => [
+            "name_placeholder" => "Search by name...",
+            "city_placeholder" => "Search by city...",
+            "type_placeholder" => "Type (Free/Pay)"
+        ],
+        "table" => [
+            "name" => "Name",
+            "city" => "Location",
+            "type" => "Type",
+            'actions' => 'Actions'
+        ],
+        'form' => [
+            'create_title' => 'Create Attraction',
+            'name' => 'Name',
+            'name_placeholder' => 'Enter the name of the attraction',
+            'type' => 'Type',
+            'type_placeholder' => 'Select a type',
+            'city' => 'City',
+            'city_placeholder' => 'Select a city',
+            'free' => 'Free',
+            'pay' => 'Pay',
+            'description_placeholder' => 'Enter the description'
+        ]
+    ]
+
 ];

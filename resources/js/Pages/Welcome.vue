@@ -20,7 +20,7 @@
                 <Link
                     href="/attractions"
                     class="text-blue-600 hover:text-blue-800 text-sm underline">
-                    ¡Participa en nuestra gran colección de Atracciones Turísticas!
+                    {{ t('messages.attraction_link') }}
                 </Link>
             </div>
         </div>

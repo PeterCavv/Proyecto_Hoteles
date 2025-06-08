@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Attraction;
 
+use App\Enums\AttractionType;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class AttractionRequest extends FormRequest
 {
@@ -10,7 +12,8 @@ class AttractionRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'type' => [ 'required', new Enum(AttractionType::class)],
+            'description' => 'nullable|string|max:500',
             'city_id' => 'required|exists:cities,id',
         ];
     }

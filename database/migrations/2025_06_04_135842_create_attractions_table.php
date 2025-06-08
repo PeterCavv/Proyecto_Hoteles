@@ -11,7 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('city_id')->constrained()->onDelete('cascade');
             $table->string('name');
-            $table->string('type')->nullable();
+            $table->enum('type', ['free', 'pay'])->default('free');
             $table->text('description')->nullable();
             $table->timestamps();
         });

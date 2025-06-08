@@ -15,7 +15,7 @@
                     <Select v-model="destination"
                             :options="cities"
                             filter optionLabel="destination"
-                            placeholder="Select a Country"
+                            :placeholder="t('messages.index.select_destination')"
                             class="w-full md:w-56"
                     >
                         <template #value="slotProps">
@@ -30,6 +30,9 @@
                             <div class="flex items-center">
                                 <div>{{ slotProps.option.name }}</div>
                             </div>
+                        </template>
+                        <template #emptyfilter>
+                            {{ t('messages.index.no_content') }}
                         </template>
                     </Select>
                 </div>
@@ -80,7 +83,7 @@ import Select from "primevue/select";
 
 const { t } = useI18n()
 
-const { cities, error, fetchCities } = useCity();
+const { cities, fetchCities } = useCity();
 
 defineOptions({
     layout: MainLayout,

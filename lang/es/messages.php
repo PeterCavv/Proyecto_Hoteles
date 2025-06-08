@@ -4,6 +4,7 @@ return [
     'app_name' => 'HotelFinder',
     'welcome' => '¡Bienvenido a HotelFinder!',
     'description' => 'Explora, compara y reserva hoteles en todo el mundo con facilidad y confianza.',
+    'attraction_link' => '¡Participa en nuestra gran colección de Atracciones Turísticas!',
     'get_started' => 'Comenzar ahora',
     'impersonating_warning_1' => 'Estás impersonando a ',
     'buttons' => [
@@ -23,6 +24,8 @@ return [
         'check_in' => 'Fecha de entrada',
         'check_out' => 'Fecha de salida',
         'search' => 'Buscar',
+        'select_destination' => 'Seleccionar destino',
+        'no_content' => 'Sin resultados'
     ],
     'auth' => [
         'login' => 'Iniciar sesión',
@@ -82,5 +85,42 @@ return [
         'title' => 'Resultados de la búsqueda ',
         'features' => 'Características',
         'feature' => 'Característica '
+    ],
+    "common" => [
+        'search' => 'Buscar',
+        'back' => 'Volver',
+        'save' => 'Guardar',
+    ],
+    "messages" => [
+        "main_menu" => [
+            "attractions" => "Atracciones Turísticas"
+        ]
+    ],
+    "attractions" => [
+        "title" => "Atracción turística",
+        "search"=> [
+            "name_placeholder"=> "Buscar por nombre...",
+                "city_placeholder"=> "Buscar por ciudad...",
+                "type_placeholder"=> "Tipo (Gratis/Pago)"
+        ],
+        "table"=> [
+            "name" => "Nombre",
+            "city" => "Ubicación",
+            "type" => "Tipo",
+            'actions' => 'Acciones'
+        ],
+        'form' => [
+            'create_title' => 'Crear Atracción',
+            'name' => 'Nombre',
+            'name_placeholder' => 'Ingrese el nombre de la atracción',
+            'type' => 'Tipo',
+            'type_placeholder' => 'Seleccione un tipo',
+            'city' => 'Ciudad',
+            'city_placeholder' => 'Seleccione una ciudad',
+            'free' => 'Gratis',
+            'pay' => 'Pago',
+            'description' => 'Descripción',
+            'description_placeholder' => 'Ingrese la descripción'
+        ]
     ]
 ];

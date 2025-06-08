@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\AttractionType;
 use App\Http\Requests\Attraction\AttractionRequest;
 use App\Models\City;
 use Illuminate\Support\Facades\Validator;
@@ -19,6 +20,7 @@ it('passes validation with valid data', function () {
     $data = [
         'name' => 'Eiffel Tower',
         'description' => 'Iconic Paris attraction',
+        'type' => AttractionType::FREE->value,
         'city_id' => $city->id,
     ];
 

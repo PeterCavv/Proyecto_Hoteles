@@ -12,14 +12,16 @@ class AttractionController extends Controller
     public function index(Request $request)
     {
         $attractions = Attraction::with('city')
-        ->filter($request->only(['city', 'name']))
+        ->filter($request->only(['city', 'name', 'type']))
         ->get();
 
         return response()->json($attractions);
     }
 
-    public function show(Attraction $attraction)
+    public function show($id)
     {
+        $attraction = Attraction::findOrFail($id);
+
         return $attraction->load('city');
     }
 
