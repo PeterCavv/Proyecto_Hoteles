@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -50,6 +51,7 @@ it('does not change the email verification status if the email is the same', fun
 
 it('allows user to delete his own account', function () {
     $user = User::factory()->create();
+    Customer::factory()->create(['user_id' => $user->id]);
 
     $response = $this->actingAs($user)->delete(route('profile.destroy', $user->id), [
         'password' => 'password',
