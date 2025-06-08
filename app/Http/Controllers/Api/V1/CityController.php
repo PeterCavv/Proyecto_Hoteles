@@ -41,7 +41,7 @@ class CityController extends Controller
 
     public function destroy(City $city)
     {
-        $this->authorize('store', $city);
+        $this->authorize('destroy', $city);
 
         $city->delete();
 

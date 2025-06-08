@@ -17,7 +17,7 @@ class NotifyAdminNewUserListener
         if(!$admins->isEmpty()){
             foreach($admins as $admin){
                 Mail::to($admin->email)
-                    ->send(new NewUserAlertMail($event->user));
+                    ->queue(new NewUserAlertMail($event->user));
             }
         }
     }

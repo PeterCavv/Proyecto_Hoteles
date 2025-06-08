@@ -89,3 +89,23 @@ it('denies non-admin from updating a city', function () {
     $this->assertDatabaseHas('cities', ['name' => 'Do Not Change']);
 });
 
+it('allows an admin to delete a city', function () {
+    $city = City::factory()->create();
+
+    $response =  $this->actingAs($this->admin)->deleteJson(route('cities.destroy', $city));
+
+    $response->assertNoContent();
+
+    $this->assertDatabaseMissing('cities', ['id' => $city->id]);
+});
+
+it('denies non-admin to delete a city', function () {
+    $city = City::factory()->create();
+
+    $response =  $this->actingAs($this->nonAdmin)->deleteJson(route('cities.destroy', $city));
+
+    $response->assertForbidden();
+
+    $this->assertDatabaseHas('cities', ['id' => $city->id]);
+});
+
