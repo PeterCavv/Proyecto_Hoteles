@@ -28,5 +28,6 @@ return [
             'email' => 'What is the admin email?',
             'password' => 'What is the admin password?',
         ],
+        'dev_clear_cache' => 'Cache cleared successfully.'
     ],
 ];
