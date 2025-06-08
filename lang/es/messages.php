@@ -111,6 +111,7 @@ return [
         ],
         'form' => [
             'create_title' => 'Crear Atracción',
+            'edit_title' => 'Editar Atracción',
             'name' => 'Nombre',
             'name_placeholder' => 'Ingrese el nombre de la atracción',
             'type' => 'Tipo',

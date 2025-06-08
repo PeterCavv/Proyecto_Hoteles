@@ -13,7 +13,7 @@ class AttractionRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'type' => [ 'required', new Enum(AttractionType::class)],
-            'description' => 'nullable|string|max:500',
+            'description' => 'nullable|string|max:800',
             'city_id' => 'required|exists:cities,id',
         ];
     }

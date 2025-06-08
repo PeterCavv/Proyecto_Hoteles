@@ -69,12 +69,23 @@ export function useAttractions() {
         }
     }
 
+    const updateAttraction = async (attraction) => {
+        error.value = null;
+        try {
+            const response = await axios.put(`/api/attractions/${attraction.id}`, attraction);
+            return response.data;
+        } catch (err) {
+            error.value = err;
+        }
+    }
+
     return {
         attractions,
         attraction,
         error,
         fetchAttractions,
         fetchAttraction,
-        saveAttraction
+        saveAttraction,
+        updateAttraction
     }
 }

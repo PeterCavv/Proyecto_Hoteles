@@ -98,6 +98,7 @@ return [
         ],
         'form' => [
             'create_title' => 'Create Attraction',
+            'edit_title' => 'Edit Attraction',
             'name' => 'Name',
             'name_placeholder' => 'Enter the name of the attraction',
             'type' => 'Type',

@@ -29,6 +29,12 @@ Route::get('/attractions/{attraction}', function (Attraction $attraction) {
     ]);
 });
 
+Route::get('/attractions/edit/{attraction}', function (Attraction $attraction) {
+    return Inertia::render('Public/AttractionEdit', [
+        'id' => $attraction->id
+    ]);
+});
+
 
 // Hotels
 

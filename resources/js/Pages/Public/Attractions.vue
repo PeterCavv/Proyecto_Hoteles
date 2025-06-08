@@ -58,7 +58,7 @@
                 >
                     <template #body="{ data }">
                         <Link :href="`/attractions/${data.id}`" class="pi pi-eye mr-2 text-blue-600 hover:text-blue-800"></Link>
-                        <span class="pi pi-file-edit mr-2 text-green-600 hover:text-green-800"></span>
+                        <Link :href="`/attractions/edit/${data.id}`" class="pi pi-file-edit mr-2 text-green-600 hover:text-green-800"></Link>
                         <span class="pi pi-trash text-red-600 hover:text-red-800"></span>
                     </template>
                 </Column>
