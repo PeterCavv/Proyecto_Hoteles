@@ -888,7 +888,7 @@ endpoints:
       subgroupDescription: ''
       title: 'Update the specified reservation.'
       description: ''
-      authenticated: false
+      authenticated: true
       custom: []
     headers:
       Content-Type: application/json
@@ -1042,7 +1042,7 @@ endpoints:
       subgroupDescription: ''
       title: 'Remove the specified reservation.'
       description: ''
-      authenticated: false
+      authenticated: true
       custom: []
     headers:
       Content-Type: application/json

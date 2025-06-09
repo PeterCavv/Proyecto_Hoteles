@@ -8,8 +8,8 @@
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="{{ asset("/vendor/scribe/css/theme-default.style.css") }}" media="screen">
-    <link rel="stylesheet" href="{{ asset("/vendor/scribe/css/theme-default.print.css") }}" media="print">
+    <link rel="stylesheet" href="../docs/css/theme-default.style.css" media="screen">
+    <link rel="stylesheet" href="../docs/css/theme-default.print.css" media="print">
 
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
 
@@ -30,9 +30,9 @@
         var useCsrf = Boolean();
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
-    <script src="{{ asset("/vendor/scribe/js/tryitout-5.2.1.js") }}"></script>
+    <script src="../docs/js/tryitout-5.2.1.js"></script>
 
-    <script src="{{ asset("/vendor/scribe/js/theme-default-5.2.1.js") }}"></script>
+    <script src="../docs/js/theme-default-5.2.1.js"></script>
 
 </head>
 
@@ -41,7 +41,7 @@
 <a href="#" id="nav-button">
     <span>
         MENU
-        <img src="{{ asset("/vendor/scribe/images/navbar.png") }}" alt="navbar-image"/>
+        <img src="../docs/images/navbar.png" alt="navbar-image"/>
     </span>
 </a>
 <div class="tocify-wrapper">
@@ -118,8 +118,8 @@
             </div>
 
     <ul class="toc-footer" id="toc-footer">
-                    <li style="padding-bottom: 5px;"><a href="{{ route("scribe.postman") }}">View Postman collection</a></li>
-                            <li style="padding-bottom: 5px;"><a href="{{ route("scribe.openapi") }}">View OpenAPI spec</a></li>
+                    <li style="padding-bottom: 5px;"><a href="../docs/collection.json">View Postman collection</a></li>
+                            <li style="padding-bottom: 5px;"><a href="../docs/openapi.yaml">View OpenAPI spec</a></li>
                 <li><a href="http://github.com/knuckleswtf/scribe">Documentation powered by Scribe ✍</a></li>
     </ul>
 
@@ -2089,6 +2089,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                     <h2 id="endpoints-PUTapi-reservations--id-">Update the specified reservation.</h2>
 
 <p>
+<small class="badge badge-darkred">requires authentication</small>
 </p>
 
 
@@ -2177,7 +2178,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 </span>
 <form id="form-PUTapi-reservations--id-" data-method="PUT"
       data-path="api/reservations/{id}"
-      data-authed="0"
+      data-authed="1"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
@@ -2350,6 +2351,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                     <h2 id="endpoints-DELETEapi-reservations--id-">Remove the specified reservation.</h2>
 
 <p>
+<small class="badge badge-darkred">requires authentication</small>
 </p>
 
 
@@ -2407,7 +2409,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
 </span>
 <form id="form-DELETEapi-reservations--id-" data-method="DELETE"
       data-path="api/reservations/{id}"
-      data-authed="0"
+      data-authed="1"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"

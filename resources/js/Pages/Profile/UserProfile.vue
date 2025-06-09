@@ -32,10 +32,6 @@
                 </p>
             </div>
 
-            <Link href="/" class="text-xl font-bold text-gray-800">
-                {{ t('messages.app_name') }}
-            </Link>
-
             <Link
                 :href="`/profile/${user.id}/reviews/`"
                 icon="pi pi-list"

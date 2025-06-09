@@ -118,6 +118,8 @@ class ReservationController extends Controller
     /**
      * Update the specified reservation.
      *
+     * @authenticated
+     *
      * @urlParam reservation int required The ID of the reservation to update. Example: 5
      * @bodyParam customer_id int The ID of the customer making the reservation. Example: 2
      * @bodyParam room_type_id int The ID of the room type. Example: 3
@@ -146,6 +148,8 @@ class ReservationController extends Controller
 
     /**
      * Remove the specified reservation.
+     *
+     * @authenticated
      *
      * @urlParam reservation int required The ID of the reservation to delete. Example: 5
      *
