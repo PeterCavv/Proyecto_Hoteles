@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Customer extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'user_id',
@@ -29,13 +30,8 @@ class Customer extends Model
         return $this->hasMany(Reservation::class);
     }
 
-    public function hotels(): BelongsToMany
+    public function follows(): HasMany
     {
-        return $this->belongsToMany(
-            Hotel::class,
-            'follows',
-            'customer_id',
-            'hotel_id'
-        )->withPivot('followed_at')->withTimestamps();
+        return $this->hasMany(Follow::class);
     }
 }

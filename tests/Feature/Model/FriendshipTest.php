@@ -9,59 +9,41 @@ use Tests\TestCase;
 
 uses(RefreshDatabase::class);
 
-it('can create a friendship', function () {
-    $user1 = User::factory()->create();
-    $user2 = User::factory()->create();
-
-    $friendship = Friendship::factory()->create([
-        'user_1_id' => $user1->id,
-        'user_2_id' => $user2->id,
+beforeEach(function () {
+    $this->user1 = User::factory()->create();
+    $this->user2 = User::factory()->create();
+    $this->friendship = Friendship::factory()->create([
+        'user_1_id' => $this->user1->id,
+        'user_2_id' => $this->user2->id,
         'status' => FriendshipStatus::PENDING,
-    ]);
+    ]);;
+});
 
-    expect($friendship)->toBeInstanceOf(Friendship::class)
-        ->and($friendship->status)->toBe(FriendshipStatus::PENDING);
-})->uses(TestCase::class);
+it('belongs to user1 and user2', function () {
+    expect($this->friendship->user1)->toBeInstanceOf(User::class)
+        ->and($this->friendship->user1->id)->toBe($this->user1->id)
+        ->and($this->friendship->user2)->toBeInstanceOf(User::class)
+        ->and($this->friendship->user2->id)->toBe($this->user2->id);
+});
 
-it('can accept a friendship', function () {
-    $friendship = Friendship::factory()->create([
-        'status' => FriendshipStatus::PENDING,
-    ]);
+it('can accept a friendship request', function () {
+    $this->friendship->accept();
 
-    $friendship->accept();
-
-    expect($friendship->fresh()->status)->toBe(FriendshipStatus::ACCEPTED);
-})->uses(TestCase::class);
+    expect($this->friendship->status)->toBe(FriendshipStatus::ACCEPTED)
+        ->and(Friendship::find($this->friendship->id)->status)->toBe(FriendshipStatus::ACCEPTED);
+});
 
 it('can block a friendship', function () {
-    $friendship = Friendship::factory()->create([
-        'status' => FriendshipStatus::PENDING,
-    ]);
+    $this->friendship->block();
 
-    $friendship->block();
+    expect($this->friendship->status)->toBe(FriendshipStatus::BLOCKED)
+        ->and(Friendship::find($this->friendship->id)->status)->toBe(FriendshipStatus::BLOCKED);
+});
 
-    expect($friendship->fresh()->status)->toBe(FriendshipStatus::BLOCKED);
-})->uses(TestCase::class);
+it('can reject a friendship, deleting the record', function () {
+    $this->friendship->reject();
 
-it('can reject a friendship', function () {
-    $friendship = Friendship::factory()->create();
+    expect(Friendship::find($this->friendship->id))->toBeNull();
+});
 
-    $friendship->reject();
-
-    expect(Friendship::find($friendship->id))->toBeNull();
-})->uses(TestCase::class);
-
-it('has user1 and user2 relationships', function () {
-    $user1 = User::factory()->create();
-    $user2 = User::factory()->create();
-
-    $friendship = Friendship::create([
-        'user_1_id' => $user1->id,
-        'user_2_id' => $user2->id,
-        'status' => FriendshipStatus::PENDING,
-    ]);
-
-    expect($friendship->user1->id)->toBe($user1->id)
-        ->and($friendship->user2->id)->toBe($user2->id);
-})->uses(TestCase::class);
 

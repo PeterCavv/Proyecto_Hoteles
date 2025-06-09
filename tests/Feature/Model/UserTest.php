@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Model;
 
+use App\Enums\RoleEnum;
 use App\Models\Customer;
 use App\Models\Hotel;
 use App\Models\Like;
@@ -9,93 +10,127 @@ use App\Models\Review;
 use App\Models\User;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 uses(RefreshDatabase::class);
 
-it('can be a customer but not an hotel', function () {
-    $user = User::factory()->create();
-    Customer::factory()->create(['user_id' => $user->id]);
-
-    expect($user->isCustomer())->toBeTrue()
-        ->and($user->isHotel())->toBeFalse();
-})->uses(TestCase::class);
-
-it('can be a hotel but not a customer', function () {
-    $user = User::factory()->create();
-    Hotel::factory()->create(['user_id' => $user->id]);
-
-    expect($user->isHotel())->toBeTrue()
-        ->and($user->isCustomer())->toBeFalse();
-})->uses(TestCase::class);
+beforeEach(function () {
+    $this->user = User::factory()->create();
+});
 
 it('has one customer', function () {
-    $user = User::factory()->create();
-    $customer = Customer::factory()->create(['user_id' => $user->id]);
+    $customer = Customer::factory()->create(['user_id' => $this->user->id]);
 
-    expect($user->customer)->toBeInstanceOf(Customer::class)
-        ->and($user->customer->id)->toBe($customer->id);
-})->uses(TestCase::class);
+    expect($this->user->customer)->toBeInstanceOf(Customer::class)
+        ->and($this->user->customer->id)->toBe($customer->id);
+});
 
 it('has one hotel', function () {
-    $user = User::factory()->create();
-    $hotel = Hotel::factory()->create(['user_id' => $user->id]);
+    $hotel = Hotel::factory()->create(['user_id' => $this->user->id]);
 
-    expect($user->hotel)->toBeInstanceOf(Hotel::class)
-        ->and($user->hotel->id)->toBe($hotel->id);
-})->uses(TestCase::class);
+    expect($this->user->hotel)->toBeInstanceOf(Hotel::class)
+        ->and($this->user->hotel->id)->toBe($hotel->id);
+});
 
 it('has many reviews', function () {
-    $user = User::factory()->create();
-    $hotel = Hotel::factory()->create();
-    $review1 = Review::factory()->create(['user_id' => $user->id, 'hotel_id' => $hotel->id]);
-    $review2 = Review::factory()->create(['user_id' => $user->id, 'hotel_id' => $hotel->id]);
+    $review1 = Review::factory()->create(['user_id' => $this->user->id]);
+    $review2 = Review::factory()->create(['user_id' => $this->user->id]);
 
-    expect($user->reviews)->toHaveCount(2)
-        ->and($user->reviews->first()->id)->toBe($review1->id);
-})->uses(TestCase::class);
+    expect($this->user->reviews)->toHaveCount(2)
+        ->and($this->user->reviews->pluck('id'))->toContain($review1->id)
+        ->and($this->user->reviews->pluck('id'))->toContain($review2->id);
+});
 
 it('has many likes', function () {
-    $user = User::factory()->create();
-    $review = Review::factory()->create();
-    $like = Like::factory()->create(['user_id' => $user->id, 'review_id' => $review->id]);
+    $like1 = Like::factory()->create(['user_id' => $this->user->id]);
+    $like2 = Like::factory()->create(['user_id' => $this->user->id]);
 
-    expect($user->likes)->toHaveCount(1)
-        ->and($user->likes->first()->id)->toBe($like->id);
-})->uses(TestCase::class);
+    expect($this->user->likes)->toHaveCount(2)
+        ->and($this->user->likes->pluck('id'))->toContain($like1->id)
+        ->and($this->user->likes->pluck('id'))->toContain($like2->id);
+});
 
-it('has many friends', function () {
-    $user1 = User::factory()->create();
+it('can block and unblock users', function () {
     $user2 = User::factory()->create();
-    $user3 = User::factory()->create();
 
-    $user1->friends()->attach($user2->id, ['status' => 'accepted']);
-    $user1->friends()->attach($user3->id, ['status' => 'pending']);
+    $this->user->block($user2);
+    $this->user->refresh();
 
-    expect($user1->friends)->toHaveCount(1)
-        ->and($user1->friends->first()->id)->toBe($user2->id);
-})->uses(TestCase::class);
+    expect($this->user->blockedFriends->pluck('id'))->toContain($user2->id)
+        ->and($this->user->isBlockedBy($user2))->toBeFalse()
+        ->and($user2->isBlockedBy($this->user))->toBeFalse();
 
-it('has many pending friends', function () {
-    $user1 = User::factory()->create();
-    $user2 = User::factory()->create();
-    $user3 = User::factory()->create();
+    $this->user->unblock($user2);
+    $this->user->refresh();
 
-    $user1->friends()->attach($user2->id, ['status' => 'pending']);
-    $user1->friends->first->accepted = true;
+    expect($this->user->blockedFriends)->toHaveCount(0)
+        ->and($user2->isBlockedBy($this->user))->toBeFalse();
+});
 
-    expect($user1->pendingFriends)->toHaveCount(1)
-        ->and($user1->pendingFriends->first()->id)->toBe($user2->id);
-})->uses(TestCase::class);
+it('can detect if it is a customer or hotel owner', function () {
+    Role::findOrCreate('customer');
+    Role::findOrCreate('hotel');
 
-it('has many blocked friends', function () {
-    $user1 = User::factory()->create();
-    $user2 = User::factory()->create();
-    $user3 = User::factory()->create();
+    expect($this->user->isCustomer())->toBeFalse()
+        ->and($this->user->isHotel())->toBeFalse();
 
-    $user1->friends()->attach($user2->id, ['status' => 'blocked']);
-    $user1->friends()->attach($user3->id, ['status' => 'accepted']);
+    Customer::factory()->create(['user_id' => $this->user->id]);
+    $this->user->assignRole('customer');
+    $this->user->refresh();
+    expect($this->user->isCustomer())->toBeTrue();
 
-    expect($user1->blockedFriends)->toHaveCount(1)
-        ->and($user1->blockedFriends->first()->id)->toBe($user2->id);
-})->uses(TestCase::class);
+    Hotel::factory()->create(['user_id' => $this->user->id]);
+    $this->user->syncRoles(['hotel']);
+    $this->user->refresh();
+    expect($this->user->isHotel())->toBeTrue();
+});
+
+it('detects if the user is admin', function () {
+    Role::findOrCreate(RoleEnum::ADMIN->value);
+    $this->user->assignRole(RoleEnum::ADMIN->value);
+    $this->user->refresh();
+
+    expect($this->user->isAdmin())->toBeTrue();
+});
+
+
+it('returns the correct role name attribute', function () {
+    Role::findOrCreate(RoleEnum::ADMIN->value);
+    $this->user->assignRole(RoleEnum::ADMIN->value);
+    $this->user->refresh();
+
+    expect($this->user->role_name)->toBe('admin');
+});
+
+it('can block and unblock a collection of users', function () {
+    $users = User::factory()->count(2)->create();
+    $this->user->block($users);
+    $this->user->refresh();
+
+    expect($this->user->blockedFriends->pluck('id'))->toContain($users[0]->id)
+        ->and($this->user->blockedFriends->pluck('id'))->toContain($users[1]->id);
+
+    $this->user->unblock($users);
+    $this->user->refresh();
+
+    expect($this->user->blockedFriends)->toHaveCount(0);
+});
+
+it('can block and unblock users from an array of ids', function () {
+    $users = User::factory()->count(2)->create();
+    $arrayOfUsers = $users->map(fn($u) => ['id' => $u->id])->toArray();
+
+    $this->user->block($arrayOfUsers);
+    $this->user->refresh();
+
+    expect($this->user->blockedFriends->pluck('id'))->toContain($users[0]->id)
+        ->and($this->user->blockedFriends->pluck('id'))->toContain($users[1]->id);
+
+    $this->user->unblock($arrayOfUsers);
+    $this->user->refresh();
+
+    expect($this->user->blockedFriends)->toHaveCount(0);
+});
+
+

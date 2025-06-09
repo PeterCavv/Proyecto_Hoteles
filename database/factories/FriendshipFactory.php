@@ -17,15 +17,14 @@ class FriendshipFactory extends Factory
 
         $statuses = FriendshipStatus::cases();
 
-        // Verifica que no esté vacío
         if (empty($statuses)) {
-            dd('Enum vacío'); // Debug: esto NO debería ejecutarse
+            dd('Enum vacío');
         }
 
         return [
             'user_1_id' => User::factory()->create()->id,
             'user_2_id' => User::factory()->create()->id,
-            'status' => FriendshipStatus::cases()[array_rand(FriendshipStatus::cases())],
+            'status' => FriendshipStatus::cases()[array_rand($statuses)],
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ];

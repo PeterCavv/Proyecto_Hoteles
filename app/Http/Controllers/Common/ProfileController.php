@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Common;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
@@ -13,8 +14,12 @@ use Inertia\Response;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
+
+     /**
+     * Display the user's profile edit form.
+     *
+     * @param Request $request
+     * @return Response
      */
     public function edit(Request $request): Response
     {
@@ -25,7 +30,12 @@ class ProfileController extends Controller
     }
 
     /**
-     * Update the user's profile information.
+     * Update the authenticated user's profile information.
+     *
+     * If the email address was changed, the email verification timestamp will be reset.
+     *
+     * @param ProfileUpdateRequest $request
+     * @return RedirectResponse
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
@@ -41,7 +51,14 @@ class ProfileController extends Controller
     }
 
     /**
-     * Delete the user's account.
+     * Delete the authenticated user's account.
+     *
+     * Validates the current password before deleting.
+     * Logs out the user, deletes related customer data and the user record,
+     * then invalidates and regenerates the session token.
+     *
+     * @param Request $request
+     * @return RedirectResponse
      */
     public function destroy(Request $request): RedirectResponse
     {
@@ -53,6 +70,10 @@ class ProfileController extends Controller
 
         Auth::logout();
 
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        $user->customer->delete();
         $user->delete();
 
         $request->session()->invalidate();
@@ -60,4 +81,5 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
 }

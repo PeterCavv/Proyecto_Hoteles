@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\RoleEnum;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,11 +14,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use LaravelIdea\Helper\App\Models\_IH_User_C;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, softDeletes;
+    use HasFactory, Notifiable, softDeletes, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -30,7 +32,20 @@ class User extends Authenticatable
         'password',
         'avatar',
         'phone_number',
+        'city',
+        'email_verified_at'
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+            'role' => RoleEnum::class,
+        ];
+    }
+
+    protected $appends = ['role_name'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -41,19 +56,6 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
 
     public function customer(): HasOne
     {
@@ -111,7 +113,7 @@ class User extends Authenticatable
      */
     public function isCustomer(): bool
     {
-        return $this->customer()->exists();
+        return $this->hasRole(RoleEnum::CUSTOMER->value);
     }
 
     /**
@@ -120,7 +122,18 @@ class User extends Authenticatable
      */
     public function isHotel(): bool
     {
-        return $this->hotel()->exists();
+        return $this->hasRole(RoleEnum::HOTEL->value);
+
+    }
+
+    /**
+     * Check if the user is an Admin.
+     * @return bool
+     */
+    public function isAdmin(): bool
+    {
+        return $this->hasRole(RoleEnum::ADMIN->value);
+
     }
 
     /**
@@ -182,5 +195,15 @@ class User extends Authenticatable
                 $this->blockedFriends()->detach($user['id']);
             }
         }
+    }
+
+    /**
+     * Get the user's role name.
+     *
+     * @return string
+     */
+    public function getRoleNameAttribute(): string
+    {
+        return $this->roles->first()?->name ?? '';
     }
 }
