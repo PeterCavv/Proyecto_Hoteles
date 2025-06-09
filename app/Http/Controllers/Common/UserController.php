@@ -22,7 +22,7 @@ class UserController extends Controller
     public function show(User $user)
     {
         return inertia('Profile/UserProfile', [
-            'user' => $user->load('roles', 'customer'),
+            'user' => $user->load('roles', 'customer', 'reviews'),
             'authUserId' => auth()->id(),
             'csrfToken' => csrf_token(),
         ]);
@@ -49,5 +49,13 @@ class UserController extends Controller
         $user->update($request->validated());
 
         return redirect()->route('profile.show', $user);
+    }
+
+    public function reviews(User $user)
+    {
+        return inertia('Profile/UserReviews', [
+            'reviews' => $user->reviews->load('hotel'),
+            'user' => $user
+        ]);
     }
 }

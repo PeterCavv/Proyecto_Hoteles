@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\FeatureController;
 use App\Http\Controllers\Admin\ImpersonationController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -10,6 +11,9 @@ Route::get('/users', [UserController::class, 'index'])->name('users.index');
 Route::get('impersonate/{user}', [ImpersonationController::class, 'start'])
     ->middleware('can:impersonate,user')
     ->name('impersonate.start');
+
+Route::get('/reports/{user}/reviews-pdf', [ReportController::class, 'reviewsPdf'])
+    ->name('reports.reviews.pdf');
 
 // Features
 

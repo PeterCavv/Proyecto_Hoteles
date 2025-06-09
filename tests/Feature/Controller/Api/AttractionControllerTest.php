@@ -35,7 +35,7 @@ it('returns filtered attractions on index', function () {
     $response = $this->getJson(route('attractions.index'));
     $response->assertOk()->assertJsonCount(3);
 
-    $response = $this->getJson(route('attractions.index', ['city' => 'Madrid']));
+    $response = $this->getJson(route('attractions.index', ['city' => $city1->id]));
     $response->assertOk()
         ->assertJsonCount(2)
         ->assertJsonFragment(['name' => 'Parque Retiro'])

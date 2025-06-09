@@ -30,7 +30,7 @@ it('can filter attractions by city name and name of the attraction', function ()
         'city_id' => $barcelona->id,
     ]);
 
-    $filtered = Attraction::filter(['city' => 'Madrid', 'name' => 'Museo'])->get();
+    $filtered = Attraction::filter(['city' => $madrid->id, 'name' => 'Museo'])->get();
 
     expect($filtered)->toHaveCount(1)
         ->and($filtered->first()->id)->toBe($attractionMadrid->id);

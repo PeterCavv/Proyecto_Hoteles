@@ -2,6 +2,7 @@
 
 
 use App\Enums\RoleEnum;
+use App\Models\Hotel;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Role;
@@ -130,4 +131,25 @@ it('does not allow a non-admin user to update another user profile', function ()
     $response = $this->put(route('profile.update', $user), $data);
 
     $response->assertStatus(403);
+});
+
+it('shows the reviews of a user with hotel relationship loaded', function () {
+    $user = User::factory()->create();
+    $viewer = User::factory()->create();
+
+    $user->reviews()->createMany([
+        ['rating' => 4, 'comment' => 'Buena', 'hotel_id' => Hotel::factory()->create()->id],
+        ['rating' => 5, 'comment' => 'Excelente', 'hotel_id' => Hotel::factory()->create()->id],
+    ]);
+
+    actingAs($viewer)
+        ->get(route('review.index', $user))
+        ->assertOk()
+        ->assertInertia(fn ($page) =>
+        $page->component('Profile/UserReviews')
+            ->where('user.id', $user->id)
+            ->has('reviews', 2)
+            ->has('reviews.0.hotel')
+            ->has('reviews.1.hotel')
+        );
 });

@@ -36,20 +36,24 @@ class ReservationController extends Controller
      */
     public function index()
     {
-        if (auth()->user()->isAdmin()) {
-            $reservations = Reservation::with(['customer.user', 'roomType', 'hotel'])->get();
-        } elseif (auth()->user()->isCustomer()) {
-            $customerId = auth()->user()->customer->id;
-            $reservations = Reservation::with(['customer.user', 'roomType', 'hotel'])
-                ->where('customer_id', $customerId)
-                ->get();
-        } elseif (auth()->user()->isHotel()) {
-            $hotelId = auth()->user()->hotel->id;
-            $reservations = Reservation::with(['customer.user', 'roomType', 'hotel'])
-                ->where('hotel_id', $hotelId)
-                ->get();
-        } else {
-            $reservations = collect();
+        try {
+            if (auth()->user()->isAdmin()) {
+                $reservations = Reservation::with(['customer.user', 'roomType', 'hotel'])->get();
+            } elseif (auth()->user()->isCustomer() && auth()->user()->customer) {
+                $customerId = auth()->user()->customer->id;
+                $reservations = Reservation::with(['customer.user', 'roomType', 'hotel'])
+                    ->where('customer_id', $customerId)
+                    ->get();
+            } elseif (auth()->user()->isHotel() && auth()->user()->hotel) {
+                $hotelId = auth()->user()->hotel->id;
+                $reservations = Reservation::with(['customer.user', 'roomType', 'hotel'])
+                    ->where('hotel_id', $hotelId)
+                    ->get();
+            } else {
+                $reservations = collect();
+            }
+        } catch (\Throwable $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
 
         return response()->json($reservations);

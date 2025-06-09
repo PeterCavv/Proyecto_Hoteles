@@ -20,6 +20,9 @@ const { t } = useI18n();
                         <Link v-if="$page.props.auth.is_admin" href="/users" class="text-gray-700 hover:text-gray-900">
                             {{ t('messages.main_menu.users') }}
                         </Link>
+                        <Link href="/reservations" class="text-gray-700 hover:text-gray-900">
+                            {{ t('messages.main_menu.reservations') }}
+                        </Link>
                         <a href="/about" class="text-gray-700 hover:text-gray-900">
                             {{ t('messages.main_menu.about') }}
                         </a>

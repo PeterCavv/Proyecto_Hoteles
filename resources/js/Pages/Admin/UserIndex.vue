@@ -93,14 +93,12 @@
                     />
 
                     <div class="grid grid-cols-2 gap-4">
-                        <Button
-                            :label="t('messages.buttons.edit')"
-                            icon="pi pi-pencil"
-                            severity="info"
-                            class="w-full"
-                            @click="router.visit(route('users.edit', { user: selectedUser.id }))"
-                            :disabled="!selectedUser"
-                        />
+                        <Link
+                            class="w-full p-button p-button-info"
+                            :href="selectedUser ? `/profile/${selectedUser?.id}` : ''"
+                        >
+                            <span>{{t('messages.buttons.edit')}}</span>
+                        </Link>
                         <Button
                             :label="t('messages.buttons.delete')"
                             icon="pi pi-trash"
@@ -117,7 +115,7 @@
 </template>
 
 <script setup>
-import {Head, router} from '@inertiajs/vue3';
+import {Head, router, Link} from '@inertiajs/vue3';
 import MainLayout from "@/Layouts/MainLayout.vue";
 import 'primeicons/primeicons.css'
 import {computed, ref} from "vue";

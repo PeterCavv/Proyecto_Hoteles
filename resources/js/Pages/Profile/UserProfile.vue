@@ -2,11 +2,21 @@
     <Toast />
     <Head title="Perfil de Usuario" />
 
-    <div class="max-w-6xl mx-auto px-4 py-10">
+    <div class="max-w-6xl mx-auto px-4 py-10 lg:w-[800px]">
         <div class="bg-white shadow-2xl rounded-2xl p-8 ring-1 ring-gray-200 space-y-8">
-            <h2 class="text-3xl font-extrabold text-gray-900">
-                {{ t('messages.user_profile.user_details') }}
-            </h2>
+            <div class="flex flex-row justify-between items-center mb-4">
+                <h2 class="text-3xl font-extrabold text-gray-900">
+                    {{ t('messages.user_profile.user_details') }}
+                </h2>
+                <SplitButton
+                    v-if="$page.props.auth.user.id === user.id"
+                    severity="info"
+                    :label="t('messages.user_profile.log_out')"
+                    @click="logOut(form)"
+                    dropdownIcon="pi pi-cog"
+                    :model="items"
+                />
+            </div>
             <p class="text-gray-600">
                 {{ t('messages.user_profile.user_details_description') }}
             </p>
@@ -22,26 +32,18 @@
                 </p>
             </div>
 
-            <Button
-                :label="t('messages.buttons.edit')"
-                icon="pi pi-pencil"
-                class="p-button-info w-full"
-                @click="ifEdit = true"/>
+            <Link href="/" class="text-xl font-bold text-gray-800">
+                {{ t('messages.app_name') }}
+            </Link>
 
-            <Button
-                v-if="user.role_name !== 'admin'"
-                :label="t('messages.buttons.delete')"
-                icon="pi pi-trash"
-                class="p-button-danger w-full"
-                @click="ifDelete = true"/>
-
-            <Button
-                v-if="$page.props.auth.user.id === user.id"
-                :label="t('messages.user_profile.log_out')"
-                icon="pi pi-trash"
-                class="p-button-secondary w-full"
-                @click="logOut(form)"
-            />
+            <Link
+                :href="`/profile/${user.id}/reviews/`"
+                icon="pi pi-list"
+                severity="contrast"
+                class="p-button p-button-contrast w-full"
+            >
+                <span>{{ t('messages.user_profile.show_reviews') }}</span>
+            </Link>
 
             <Dialog
                     v-model:visible="ifEdit"
@@ -155,7 +157,7 @@
 </template>
 
 <script setup>
-import {Head, useForm} from '@inertiajs/vue3';
+import {Head, Link, useForm} from '@inertiajs/vue3';
 import MainLayout from "@/Layouts/MainLayout.vue";
 import {useI18n} from "vue-i18n";
 import Dialog from "primevue/dialog";
@@ -164,6 +166,7 @@ import InputText from "primevue/inputtext";
 import {FloatLabel} from "primevue";
 import Toast from 'primevue/toast';
 import {useUserProfile} from "@/Composables/useUserProfile.js";
+import SplitButton from "primevue/splitbutton";
 
 const {user} = defineProps({
     user: Object,
@@ -188,4 +191,24 @@ const form = useForm({
     city: user.city || '',
     password: '',
 });
+
+const items = [
+    {
+        label: t('messages.user_profile.edit_profile'),
+        icon: 'pi pi-refresh',
+        command: () => {
+            ifEdit.value = true;
+        }
+    },
+    {
+        separator: true
+    },
+    {
+        label: t('messages.buttons.delete'),
+        icon: 'pi pi-times',
+        command: () => {
+            ifDelete.value = true;
+        }
+    }
+];
 </script>

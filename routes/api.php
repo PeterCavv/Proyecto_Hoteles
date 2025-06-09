@@ -9,6 +9,6 @@ Route::apiResource('cities', CityController::class);
 
 Route::apiResource('attractions', AttractionController::class);
 
-Route::apiResource('reservations', ReservationController::class)->middleware(['auth']);
+Route::apiResource('reservations', ReservationController::class)->middleware(['auth:sanctum']);
 
 
