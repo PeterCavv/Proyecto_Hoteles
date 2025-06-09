@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\City;
 use App\Models\Hotel;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -18,7 +19,7 @@ class HotelFactory extends Factory
             'name' => $this->faker->company,
             'description' => $this->faker->paragraph,
             'location' => $this->faker->address,
-            'city' => $this->faker->city,
+            'city_id' => City::inRandomOrder()->first()->id ?? City::factory()->create()->id,
             'postal_code' => $this->faker->postcode,
             'rating' => $this->faker->numberBetween(1, 5),
             'created_at' => Carbon::now(),

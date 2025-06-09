@@ -10,7 +10,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <div>
                     <BaseSelect
-                        v-model="destination"
+                        v-model="cityId"
                         :label="t('messages.index.destination')"
                         :options="cities"
                         optionLabel="name"
@@ -58,13 +58,13 @@ defineOptions({
     layout: MainLayout,
 })
 
-const destination = ref('')
+const cityId = ref('')
 const name = ref('')
 
 const submitSearch = () => {
-    console.log("hey")
+    console.log(cityId.value)
     router.get('/hotels/search', {
-        destination: destination.value,
+        city_id: cityId.value,
         name: name.value
     })
 }

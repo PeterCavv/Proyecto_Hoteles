@@ -12,7 +12,7 @@ class HotelRequest extends FormRequest
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:500',
             'location' => 'required|string|max:300',
-            'city' => 'required|string|max:255',
+            'city_id' => 'required|integer|exists:cities,id',
             'postal_code' => 'required|string|max:20',
             'rating' => 'nullable|integer|between:0,5'
         ];

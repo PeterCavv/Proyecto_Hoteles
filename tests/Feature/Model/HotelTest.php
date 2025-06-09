@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\City;
 use App\Models\Customer;
 use App\Models\Feature;
 use App\Models\Follow;
@@ -12,8 +13,12 @@ use Tests\TestCase;
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
-    $this->user = User::factory()->create(['city' => 'Test']);
-    $this->hotel = Hotel::factory()->create();
+    $this->user = User::factory()->create();
+    $this->city = City::factory()->create();
+    $this->hotel = Hotel::factory()->create([
+        'user_id' => $this->user->id,
+        'city_id' => $this->city->id,  // Asignamos ciudad
+    ]);
 });
 
 it('belongs to user', function () {
@@ -21,6 +26,13 @@ it('belongs to user', function () {
 
     expect($hotel->user)->toBeInstanceOf(User::class)
         ->and($hotel->user->id)->toBe($this->user->id);
+});
+
+it('belongs to city', function () {
+    $hotel = Hotel::factory()->create(['city_id' => $this->city->id]);
+
+    expect($hotel->city)->toBeInstanceOf(City::class)
+        ->and($hotel->city->id)->toBe($this->city->id);
 });
 
 it('has many features', function () {
@@ -59,16 +71,19 @@ it('has many follows', function () {
         ->and($follows->pluck('customer_id'))->toContain($customer2->id);
 });
 
-it('filters hotels by city', function () {
+it('filters hotels by city using relation', function () {
     Hotel::query()->delete();
 
-    Hotel::factory()->create(['city' => 'New York']);
-    Hotel::factory()->create(['city' => 'Los Angeles']);
+    $city1 = City::factory()->create(['name' => 'New York']);
+    $city2 = City::factory()->create(['name' => 'Los Angeles']);
 
-    $hotels = Hotel::filter(['city' => 'New'])->get();
+    Hotel::factory()->create(['city_id' => $city1->id]);
+    Hotel::factory()->create(['city_id' => $city2->id]);
+
+    $hotels = Hotel::filter(['city_id' => $city1->id])->get();
 
     expect($hotels)->toHaveCount(1)
-        ->and($hotels->first()->city)->toBe('New York');
+        ->and($hotels->first()->city->name)->toBe('New York');
 });
 
 it('filters hotels by name', function () {
@@ -82,11 +97,14 @@ it('filters hotels by name', function () {
 });
 
 it('filters hotels by city and name combined', function () {
-    Hotel::factory()->create(['name' => 'Grand Plaza', 'city' => 'New York']);
-    Hotel::factory()->create(['name' => 'Ocean View', 'city' => 'Los Angeles']);
-    Hotel::factory()->create(['name' => 'City Center', 'city' => 'New York']);
+    $cityNY = City::factory()->create(['name' => 'New York']);
+    $cityLA = City::factory()->create(['name' => 'Los Angeles']);
 
-    $hotels = Hotel::filter(['city' => 'New York', 'name' => 'City'])->get();
+    Hotel::factory()->create(['name' => 'Grand Plaza', 'city_id' => $cityNY->id]);
+    Hotel::factory()->create(['name' => 'Ocean View', 'city_id' => $cityLA->id]);
+    Hotel::factory()->create(['name' => 'City Center', 'city_id' => $cityNY->id]);
+
+    $hotels = Hotel::filter(['city_id' => $cityNY->id, 'name' => 'City'])->get();
 
     expect($hotels)->toHaveCount(1)
         ->and($hotels->first()->name)->toBe('City Center');

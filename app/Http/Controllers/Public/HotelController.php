@@ -49,10 +49,12 @@ class HotelController extends Controller
             'name' => $validated['name'],
             'description' => $validated['description'],
             'location' => $validated['location'],
-            'city' => $validated['city'],
+            'city_id' => $validated['city_id'],
             'postal_code' => $validated['postal_code'],
             'user_id' => $user->id,
         ]);
+
+
 
         return redirect()->route('hotels.show', $hotel)
             ->with('success', 'Hotel created successfully.');

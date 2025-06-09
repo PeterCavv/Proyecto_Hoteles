@@ -78,14 +78,15 @@ class Reservation extends Model
             ->join('customers', 'reservations.customer_id', '=', 'customers.id')
             ->join('users', 'customers.user_id', '=', 'users.id')
             ->join('hotels', 'reservations.hotel_id', '=', 'hotels.id')
+            ->join('cities', 'hotels.city_id', '=', 'cities.id')
             ->when($filters['customer_name'] ?? false, function ($q, $name) {
                 $q->where('users.name', 'like', "%{$name}%");
             })
             ->when($filters['customer_email'] ?? false, function ($q, $email) {
                 $q->where('users.email', $email);
             })
-            ->when($filters['hotel_city'] ?? false, function ($q, $city) {
-                $q->where('hotels.city', $city);
+            ->when($filters['hotel_city'] ?? false, function ($q, $cityName) {
+                $q->where('cities.name', $cityName);
             })
             ->when($filters['min_price'] ?? false, function ($q, $min) {
                 $q->where('reservations.price', '>=', $min);
@@ -93,6 +94,6 @@ class Reservation extends Model
             ->when($filters['max_price'] ?? false, function ($q, $max) {
                 $q->where('reservations.price', '<=', $max);
             })
-            ->with(['customer.user', 'hotel']);
+            ->with(['customer.user', 'hotel.city']);
     }
 }

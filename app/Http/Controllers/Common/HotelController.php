@@ -22,7 +22,7 @@ class HotelController extends Controller
      */
     public function index(Request $request)
     {
-        $validated = $request->only(['city', 'name']);
+        $validated = $request->only(['city_id', 'name']);
 
         $hotels = Hotel::filter($validated)
             ->with(['features', 'reviews'])

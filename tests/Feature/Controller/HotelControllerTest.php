@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\RoleEnum;
+use App\Models\City;
 use App\Models\Feature;
 use App\Models\Hotel;
 use App\Models\User;
@@ -48,11 +49,13 @@ it('renders the create hotel form', function () {
 });
 
 it('stores a new hotel', function () {
+    $city = City::factory()->create();
+
     $data = [
         'name' => 'Hotel Test',
         'description' => 'A nice place.',
         'location' => '123 Test Street',
-        'city' => 'Test City',
+        'city_id' => $city->id,
         'postal_code' => '12345',
         'user_name' => 'Test User',
         'email_name' => 'testuser@example.com',
@@ -66,7 +69,7 @@ it('stores a new hotel', function () {
 
     $this->assertDatabaseHas('hotels', [
         'name' => $data['name'],
-        'city' => $data['city'],
+        'city_id' => $data['city_id'],
     ]);
 
     $this->assertDatabaseHas('users', [
@@ -79,12 +82,13 @@ it('updates a hotel', function () {
     $user = User::factory()->create();
     $this->actingAs($user);
     $hotel = Hotel::factory()->create(['user_id' => $user->id]);
+    $newCity = City::factory()->create();
 
     $newData = [
         'name' => 'Updated Hotel Name',
         'description' => 'Test',
         'location' => 'Test',
-        'city' => 'Test',
+        'city_id' => $newCity->id,
         'postal_code' => '5555555',
         'rating' => '0'
     ];

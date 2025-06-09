@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use LaravelIdea\Helper\App\Models\_IH_Hotel_QB;
 
@@ -22,7 +23,8 @@ class Hotel extends Model
         'location',
         'city',
         'postal_code',
-        'rating'
+        'rating',
+        'city_id'
     ];
 
     /**
@@ -65,6 +67,11 @@ class Hotel extends Model
         return $this->hasMany(Follow::class);
     }
 
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(City::class);
+    }
+
     /**
      * Scope a query to filter results based on the provided filters.
      *
@@ -74,8 +81,8 @@ class Hotel extends Model
      */
     public function scopeFilter(Builder $query, array $filters): Builder
     {
-        if (!empty($filters['city'])) {
-            $query->where('city', 'like', '%' . $filters['city'] . '%');
+        if (!empty($filters['city_id'])) {
+            $query->where('city_id', $filters['city_id']);
         }
 
         if (!empty($filters['name'])) {

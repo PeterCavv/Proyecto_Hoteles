@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\City;
 use App\Models\Customer;
 use App\Models\Follow;
 use App\Models\Hotel;
@@ -41,9 +42,10 @@ it('belongs to a hotel', function () {
 it('filters reservations by customer name, email, hotel city and price', function () {
     Reservation::query()->delete();
 
+    $city1 = City::factory()->create(['name' => 'New York']);
     $user1 = User::factory()->create(['name' => 'John Doe', 'email' => 'john@example.com']);
     $customer1 = Customer::factory()->create(['user_id' => $user1->id]);
-    $hotel1 = Hotel::factory()->create(['city' => 'New York']);
+    $hotel1 = Hotel::factory()->create(['city_id' => $city1->id]);
 
     Reservation::factory()->create([
         'customer_id' => $customer1->id,
@@ -51,9 +53,10 @@ it('filters reservations by customer name, email, hotel city and price', functio
         'price' => 100,
     ]);
 
+    $city2 = City::factory()->create(['name' => 'London']);
     $user2 = User::factory()->create(['name' => 'Jane Smith', 'email' => 'jane@example.com']);
     $customer2 = Customer::factory()->create(['user_id' => $user2->id]);
-    $hotel2 = Hotel::factory()->create(['city' => 'Los Angeles']);
+    $hotel2 = Hotel::factory()->create(['city_id' => $city2->id]);
 
     Reservation::factory()->create([
         'customer_id' => $customer2->id,
@@ -71,7 +74,7 @@ it('filters reservations by customer name, email, hotel city and price', functio
 
     $reservations = Reservation::filter(['hotel_city' => 'New York'])->get();
     expect($reservations)->toHaveCount(1)
-        ->and($reservations->first()->hotel->city)->toBe('New York');
+        ->and($reservations->first()->hotel->city->name)->toBe('New York');
 
     $reservations = Reservation::filter(['min_price' => 150])->get();
     expect($reservations)->toHaveCount(1)
