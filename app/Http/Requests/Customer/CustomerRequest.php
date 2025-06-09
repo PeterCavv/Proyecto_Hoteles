@@ -13,6 +13,13 @@ class CustomerRequest extends FormRequest
         ];
     }
 
+    public function attributes(): array
+    {
+        return [
+            'dni' => __('validation.attributes.dni'),
+        ];
+    }
+
     public function authorize(): bool
     {
         return true;

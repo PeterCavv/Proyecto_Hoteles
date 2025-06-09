@@ -1,6 +1,7 @@
 <template>
     <Head :title="t('messages.attractions.form.create_title')" />
 
+    <Toast/>
     <div class="min-h-screen bg-blue-100 py-10">
         <div class="bg-white rounded-2xl shadow-lg max-w-3xl mx-auto px-6 py-8">
             <div class="mb-4">
@@ -27,14 +28,14 @@ import {Head, Link, router} from "@inertiajs/vue3";
 import {useI18n} from "vue-i18n";
 import 'primeicons/primeicons.css'
 import {useAttractions} from "@/Composables/useAttractions.js";
+import Toast from "primevue/toast";
 
 const { saveAttraction } = useAttractions();
 
 const {t} = useI18n();
 
 const handleSubmit = (data) => {
-    saveAttraction(data);
-    router.push('/attractions');
+    saveAttraction(data, null);
 };
 
 </script>

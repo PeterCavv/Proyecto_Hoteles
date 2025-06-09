@@ -17,6 +17,17 @@ class AttractionRequest extends FormRequest
             'city_id' => 'required|exists:cities,id',
         ];
     }
+
+    public function attributes(): array
+    {
+        return [
+            'name' => __('validation.attributes.name'),
+            'type' => __('validation.attributes.type'),
+            'description' => __('validation.attributes.description'),
+            'city_id' => __('validation.attributes.city'),
+        ];
+    }
+
     public function authorize(): bool
     {
         return true;

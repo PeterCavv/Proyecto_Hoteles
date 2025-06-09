@@ -21,6 +21,21 @@ class CreateHotelRequest extends FormRequest
         ];
     }
 
+    public function attributes(): array
+    {
+        return [
+            'name' => __('validation.attributes.name'),
+            'description' => __('validation.attributes.description'),
+            'location' => __('validation.attributes.location'),
+            'city' => __('validation.attributes.city'),
+            'postal_code' => __('validation.attributes.postal_code'),
+            'user_name' => __('validation.attributes.user_name'),
+            'email_name' => __('validation.attributes.email_name'),
+            'phone_number' => __('validation.attributes.phone_number'),
+            'user_city' => __('validation.attributes.user_city'),
+        ];
+    }
+
     public function authorize(): bool
     {
         return true;

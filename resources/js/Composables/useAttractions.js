@@ -1,21 +1,26 @@
 import {ref} from "vue";
 import axios from "axios";
+import {useToastControl} from "@/Composables/useToastControl.js";
+
 
 export function useAttractions() {
+    const {successManagement, errorManagement} = useToastControl();
+
     const attractions = ref([]);
     const attraction = ref(null);
     const error = ref(null);
 
     /**
-     * Asynchronously fetches a list of attractions from the server based on the provided filters.
+     * Fetches a list of attractions from the API with optional filters.
      *
-     * This function sends a GET request to the `/api/attractions` endpoint.
-     * The `filters` parameter is used to specify query parameters for filtering the attractions.
-     * The fetched data is stored in the `attractions` variable.
-     * If an error occurs during the API call, the error is captured in the `error` variable.
+     * @param {Object} filters - Optional filters to apply as query parameters.
      *
-     * @param {Object} [filters={}] Optional filters to apply as query parameters when retrieving attractions.
-     * @returns {Promise<void>} A promise that resolves once the data is fetched and the relevant variables are updated.
+     * @returns {Promise<void>}
+     *
+     * @example
+     * fetchAttractions({ city_id: 5 });
+     *
+     * On error, sets `error.value` with the error object.
      */
     const fetchAttractions = async (filters = {}) => {
         error.value = null;
@@ -28,19 +33,18 @@ export function useAttractions() {
     };
 
     /**
-     * Asynchronously fetches attraction details from the server.
+     * Fetches a single attraction by its ID from the API.
      *
-     * This function makes a GET request to the endpoint `/api/cities/{attraction}`
-     * to retrieve details about the specified attraction. If successful, it
-     * returns the data from the response. If an error occurs during the request,
-     * the error is captured in the error variable.
+     * @param {number|string} id - The ID of the attraction to fetch.
      *
-     * @returns {Promise<Object>} A Promise that resolves to the attraction data if the request is successful.
-     * @throws Will capture and store any request errors in the `error` variable.
-     * @param id
+     * @returns {Promise<void>}
+     *
+     * @example
+     * fetchAttraction(10);
+     *
+     * On error, sets `error.value` with the error object.
      */
     const fetchAttraction = async (id) => {
-        console.log("hola");
         error.value = null;
         try {
             const response = await axios.get(`/api/attractions/${id}`);
@@ -51,33 +55,56 @@ export function useAttractions() {
     }
 
     /**
-     * Saves an attraction to the server by making a POST request to the '/api/attractions' endpoint.
+     * Sends a request to create a new attraction via the API.
+     * Shows a success toast and executes an optional callback on success.
      *
-     * @async
-     * @function
-     * @param {Object} attraction - The attraction object to be saved.
-     * @returns {Promise<Object>} A promise that resolves to the response data from the server.
-     * @throws Throws an error if the request fails.
+     * @param {Object} attraction - The attraction data to save.
+     * @param {Function|null} [callbackOnSuccess] - Optional callback executed after success notification.
+     *
+     * @returns {Promise<void>}
+     *
+     * @example
+     * saveAttraction(newAttraction, () => {
+     *   router.push('/attractions');
+     * });
+     *
+     * On error, shows error toast notifications.
      */
-    const saveAttraction = async (attraction) => {
+    const saveAttraction = async (attraction, callbackOnSuccess) => {
         error.value = null;
         try {
-            const response = await axios.post('/api/attractions', attraction);
-            return response.data;
+            await axios.post('/api/attractions', attraction);
+            successManagement(callbackOnSuccess);
         } catch (err) {
-            error.value = err;
+            errorManagement(err);
         }
     }
 
-    const updateAttraction = async (attraction) => {
+    /**
+     * Sends a request to update an existing attraction via the API.
+     * Shows a success toast and executes an optional callback on success.
+     *
+     * @param {Object} attraction - The attraction data to update. Must include `id`.
+     * @param {Function|null} [callbackOnSuccess] - Optional callback executed after success notification.
+     *
+     * @returns {Promise<void>}
+     *
+     * @example
+     * updateAttraction(updatedAttraction, () => {
+     *   router.push('/attractions');
+     * });
+     *
+     * On error, shows error toast notifications.
+     */
+    const updateAttraction = async (attraction, callbackOnSuccess) => {
         error.value = null;
         try {
-            const response = await axios.put(`/api/attractions/${attraction.id}`, attraction);
-            return response.data;
+            await axios.put(`/api/attractions/${attraction.id}`, attraction);
+            successManagement(callbackOnSuccess);
         } catch (err) {
-            error.value = err;
+            errorManagement(err);
         }
-    }
+    };
 
     return {
         attractions,

@@ -1,6 +1,8 @@
 <template>
     <Head :title="t('messages.attractions.form.edit_title')" />
 
+    <Toast/>
+
     <div class="min-h-screen bg-blue-100 py-10">
         <div class="bg-white rounded-2xl shadow-lg max-w-3xl mx-auto px-6 py-8">
             <div class="mb-4">
@@ -28,13 +30,13 @@ import {useI18n} from "vue-i18n";
 import 'primeicons/primeicons.css'
 import {useAttractions} from "@/Composables/useAttractions.js";
 import {watchEffect} from "vue";
+import Toast from "primevue/toast";
 
 const { updateAttraction, fetchAttraction, attraction } = useAttractions();
 
 const {t} = useI18n();
 const handleSubmit = (data) => {
-    updateAttraction(data);
-    router.push('/attractions');
+    updateAttraction(data, null);
 };
 
 const props = defineProps({

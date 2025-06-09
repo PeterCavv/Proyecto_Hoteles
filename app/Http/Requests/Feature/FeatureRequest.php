@@ -15,6 +15,15 @@ class FeatureRequest extends FormRequest
         ];
     }
 
+    public function attributes(): array
+    {
+        return [
+            'name' => __('validation.attributes.name'),
+            'description' => __('validation.attributes.description'),
+            'icon' => __('validation.attributes.icon'),
+        ];
+    }
+
     public function authorize(): bool
     {
         return true;

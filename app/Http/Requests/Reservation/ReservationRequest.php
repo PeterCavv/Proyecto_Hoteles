@@ -20,6 +20,20 @@ class ReservationRequest extends FormRequest
         ];
     }
 
+    public function attributes(): array
+    {
+        return [
+            'customer_id'   => __('validation.attributes.customer_id'),
+            'hotel_id'      => __('validation.attributes.hotel_id'),
+            'room_type_id'  => __('validation.attributes.room_type_id'),
+            'check_in'      => __('validation.attributes.check_in'),
+            'check_out'     => __('validation.attributes.check_out'),
+            'price'         => __('validation.attributes.price'),
+            'adults'        => __('validation.attributes.adults'),
+            'children'      => __('validation.attributes.children'),
+        ];
+    }
+
     public function authorize(): bool
     {
         return true;

@@ -72,6 +72,7 @@ return [
         'deleted_successfully' => 'Eliminado exitosamente.',
         'error_saving' => 'Error al guardar',
         'caution_message' => 'Por favor, verifica los datos antes de continuar.',
+        'unexpected_error' => 'Ocurrió un error inesperado. Intenta nuevamente.',
     ],
     'deleting_account' => [
         'title' => 'Eliminar Cuenta',

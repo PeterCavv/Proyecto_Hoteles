@@ -14,6 +14,14 @@ class CityRequest extends FormRequest
         ];
     }
 
+    public function attributes(): array
+    {
+        return [
+            'name' => __('validation.attributes.name'),
+            'country' => __('validation.attributes.country'),
+        ];
+    }
+
     public function authorize(): bool
     {
         return true;

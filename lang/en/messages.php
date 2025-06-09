@@ -66,6 +66,7 @@ return [
         'deleted_successfully' => 'Deleted successfully.',
         'error_saving' => 'Error while saving',
         'caution_message' => 'Please verify the data before continuing.',
+        'unexpected_error' => 'An unexpected error occurred. Please try again.',
     ],
     'deleting_account' => [
         'title' => 'Delete Account',

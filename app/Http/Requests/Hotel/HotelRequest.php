@@ -18,6 +18,18 @@ class HotelRequest extends FormRequest
         ];
     }
 
+    public function attributes(): array
+    {
+        return [
+            'name' => __('validation.attributes.name'),
+            'description' => __('validation.attributes.description'),
+            'location' => __('validation.attributes.location'),
+            'city' => __('validation.attributes.city'),
+            'postal_code' => __('validation.attributes.postal_code'),
+            'rating' => __('validation.attributes.rating'),
+        ];
+    }
+
     public function authorize(): bool
     {
         return true;
