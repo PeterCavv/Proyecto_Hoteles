@@ -4,6 +4,7 @@
             v-model="form.name"
             :label="t('messages.attractions.form.name')"
             :placeholder="t('messages.attractions.form.name_placeholder')"
+            :error="error?.name[0]"
         />
 
         <BaseTextarea
@@ -54,7 +55,7 @@ const props = defineProps({
 const emits = defineEmits(['submit']);
 
 const { t } = useI18n();
-const { fetchCities, cities } = useCity();
+const { fetchCities, cities, error } = useCity();
 
 const form = reactive({
     name: props.modelValue?.name || '',

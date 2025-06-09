@@ -6,37 +6,7 @@
             {{ t('messages.index.search_title') }}
         </h1>
 
-        <div class="bg-white shadow rounded-xl p-6 space-y-6 lg:w-[800px]">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                <div>
-                    <BaseSelect
-                        v-model="cityId"
-                        :label="t('messages.index.destination')"
-                        :options="cities"
-                        optionLabel="name"
-                        optionValue="id"
-                        :placeholder="t('messages.index.select_destination')"
-                        class="max-w-full"
-                    />
-                </div>
-
-                <div>
-                    <BaseInput
-                        :label="t('messages.index.hotel_name')"
-                        :placeholder="t('messages.index.select_hotel')"
-                        v-model="name"
-                        class="max-w-full"
-                    />
-                </div>
-            </div>
-
-            <BaseButton
-                icon="pi pi-search"
-                :label="t('messages.index.search')"
-                severity="info"
-                @click="submitSearch"
-            />
-        </div>
+        <HotelSearchCard v-model:cityId="cityId" v-model:name="name" @submit="submitSearch" />
     </div>
 </template>
 
@@ -46,9 +16,7 @@ import { Head, router } from '@inertiajs/vue3'
 import {onMounted, ref} from 'vue'
 import { useI18n } from 'vue-i18n'
 import {useCity} from "@/Composables/useCity.js";
-import BaseInput from "@/Components/Form/BaseInput.vue"
-import BaseSelect from "@/Components/Form/BaseSelect.vue";
-import BaseButton from "@/Components/Form/BaseButton.vue";
+import HotelSearchCard from "@/Components/HotelSearchCard.vue";
 
 const { t } = useI18n()
 

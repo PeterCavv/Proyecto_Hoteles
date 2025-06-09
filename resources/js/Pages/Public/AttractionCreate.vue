@@ -30,7 +30,7 @@ import 'primeicons/primeicons.css'
 import {useAttractions} from "@/Composables/useAttractions.js";
 import Toast from "primevue/toast";
 
-const { saveAttraction } = useAttractions();
+const { saveAttraction, error } = useAttractions();
 
 const {t} = useI18n();
 

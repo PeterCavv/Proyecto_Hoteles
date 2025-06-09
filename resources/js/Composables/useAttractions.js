@@ -2,13 +2,12 @@ import {ref} from "vue";
 import axios from "axios";
 import {useToastControl} from "@/Composables/useToastControl.js";
 
-
 export function useAttractions() {
     const {successManagement, errorManagement} = useToastControl();
 
     const attractions = ref([]);
     const attraction = ref(null);
-    const error = ref(null);
+    const error = ref({});
 
     /**
      * Fetches a list of attractions from the API with optional filters.
@@ -77,6 +76,7 @@ export function useAttractions() {
             successManagement(callbackOnSuccess);
         } catch (err) {
             errorManagement(err);
+            error.value = err?.response?.data?.errors;
         }
     }
 
