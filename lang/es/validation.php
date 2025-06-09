@@ -165,7 +165,7 @@ return [
         'postal_code' => 'Código postal',
         'user_name' => 'Nombre de usuario',
         'email_name' => 'Correo electrónico',
-        'phone_number' => 'Número de teléfono',
+        'phone_number' => 'Teléfono',
         'user_city' => 'Ciudad del usuario',
         'rating' => 'Valoración',
         'customer_id'  => 'Cliente',
@@ -176,5 +176,7 @@ return [
         'price' => 'Precio',
         'adults' => 'Adultos',
         'children' => 'Niños',
+        'address' => 'Dirección',
+        'password' => 'contraseña',
     ],
 ];

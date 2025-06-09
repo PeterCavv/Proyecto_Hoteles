@@ -171,5 +171,8 @@ return [
         'price' => 'Price',
         'adults' => 'Adults',
         'children' => 'Children',
+        'phone_number' => 'Phone',
+        'address' => 'Address',
+        'password' => 'Password',
     ],
 ];

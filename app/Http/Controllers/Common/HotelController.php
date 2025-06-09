@@ -11,10 +11,14 @@ use Inertia\Response;
 class HotelController extends Controller
 {
     /**
-     * Display a listing of hotels with optional filtering.
+     * Display a listing of the hotels with optional filters by city or name.
      *
-     * @param Request $request The request containing data to filter.
-     * @return Response The rendered Inertia component with all feature data.
+     * This method retrieves hotels filtered by the provided city and/or name,
+     * including their related features and reviews. It returns an Inertia view
+     * with the list of hotels and the applied filters.
+     *
+     * @param Request $request
+     * @return Response
      */
     public function index(Request $request)
     {
@@ -31,10 +35,14 @@ class HotelController extends Controller
     }
 
     /**
-     * Display the specified hotel details.
+     * Display the details of a specific hotel.
      *
-     * @param Hotel $hotel The hotel instance to be displayed.
-     * @return Response The rendered Inertia component with feature data.
+     * This method retrieves a single hotel with its features and the users
+     * associated with its reviews. It returns an Inertia view with all
+     * necessary data for the hotel detail page.
+     *
+     * @param Hotel $hotel
+     * @return Response
      */
     public function show(Hotel $hotel)
     {

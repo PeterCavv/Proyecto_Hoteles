@@ -21,10 +21,10 @@ return [
     'index' => [
         'search_title' => 'Buscar hoteles',
         'destination' => 'Destino',
-        'check_in' => 'Fecha de entrada',
-        'check_out' => 'Fecha de salida',
+        'hotel_name' => 'Hotel',
         'search' => 'Buscar',
         'select_destination' => 'Seleccionar destino',
+        'select_hotel' => 'Nombre de hotel',
         'no_content' => 'Sin resultados'
     ],
     'auth' => [
@@ -91,11 +91,6 @@ return [
         'search' => 'Buscar',
         'back' => 'Volver',
         'save' => 'Guardar',
-    ],
-    "messages" => [
-        "main_menu" => [
-            "attractions" => "Atracciones Turísticas"
-        ]
     ],
     "attractions" => [
         "title" => "Atracción turística",

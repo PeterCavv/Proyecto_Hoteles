@@ -1,9 +1,9 @@
 <template>
     <div class="w-full">
         <label :for="name" class="block text-sm font-medium text-gray-700">{{ label }}</label>
-        <InputText
+        <PrimeInputText
             :id="name"
-            v-model="modelValue"
+            :modelValue="modelValue"
             :placeholder="placeholder"
             class="mt-1 w-full"
             :class="{ 'p-invalid': error }"
@@ -14,6 +14,8 @@
 </template>
 
 <script setup>
+import PrimeInputText from "primevue/inputtext";
+
 defineProps({
     modelValue: String,
     name: String,

@@ -25,11 +25,11 @@ class UpdateUserRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'name'         => __('validation.attributes.name'),
-            'email'        => __('validation.attributes.email_name'),
+            'name' => __('validation.attributes.name'),
+            'email' => __('validation.attributes.email_name'),
             'phone_number' => __('validation.attributes.phone_number'),
-            'city'         => __('validation.attributes.city'),
-            'dni'          => __('validation.attributes.dni'),
+            'city' => __('validation.attributes.address'),
+            'dni' => __('validation.attributes.dni'),
         ];
     }
 

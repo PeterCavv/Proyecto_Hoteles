@@ -21,8 +21,9 @@ return [
     'index' => [
         'search_title' => 'Search Hotels',
         'destination' => 'Destination',
-        'check_in' => 'Check-in Date',
-        'check_out' => 'Check-out Date',
+        'hotel_name' => 'Hotel',
+        'select_destination' => 'Select Destination',
+        'select_hotel' => 'Hotel\'s name',
         'search' => 'Search',
     ],
     'auth' => [
@@ -34,6 +35,7 @@ return [
     'main_menu' => [
         'hotels' => 'Hotels',
         'about' => 'About',
+        'attractions' => 'Attractions',
         'contact' => 'Contact',
         'users' => 'Users',
         'profile' => 'View Profile',
@@ -49,6 +51,9 @@ return [
     ],
     'user_profile' => [
         'user_details' => 'User Details',
+        'user_details_description' => 'Here you can see and update your profile details.',
+        'edit_profile' => 'Edit Profile',
+        'edit_profile_description' => 'Update your personal information and preferences.',
         'name' => 'Name',
         'email' => 'Email',
         'dni' => 'DNI',
@@ -76,14 +81,8 @@ return [
     ],
     "common" => [
         "back" => "Back",
-        'search' => 'Buscar',
+        'search' => 'Search',
         'save' => 'Save',
-    ],
-    "messages" => [
-        'title' => 'Tourist Attractions',
-        "main_menu" => [
-            "attractions" => "Tourist Attractions"
-        ]
     ],
     "attractions" => [
         "search" => [
@@ -100,6 +99,7 @@ return [
         'form' => [
             'create_title' => 'Create Attraction',
             'edit_title' => 'Edit Attraction',
+            'description' => 'Description',
             'name' => 'Name',
             'name_placeholder' => 'Enter the name of the attraction',
             'type' => 'Type',
