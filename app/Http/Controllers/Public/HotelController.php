@@ -54,8 +54,6 @@ class HotelController extends Controller
             'user_id' => $user->id,
         ]);
 
-
-
         return redirect()->route('hotels.show', $hotel)
             ->with('success', 'Hotel created successfully.');
     }

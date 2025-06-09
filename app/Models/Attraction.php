@@ -39,9 +39,7 @@ class Attraction extends Model
     public function scopeFilter(Builder $query, array $filters): Builder
     {
         if (!empty($filters['city'])) {
-            $query->whereHas('city', function ($q) use ($filters) {
-                $q->where('name', 'like', '%' . $filters['city'] . '%');
-            });
+            $query->where('city_id', $filters['city']);
         }
 
         if (!empty($filters['name'])) {

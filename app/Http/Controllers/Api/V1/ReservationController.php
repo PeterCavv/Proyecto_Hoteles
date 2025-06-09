@@ -11,11 +11,28 @@ use Illuminate\Http\Request;
 
 class ReservationController extends Controller
 {
-
     /**
      * Display a listing of reservations.
      *
-     * @return JsonResponse
+     * @authenticated
+     *
+     * The result depends on the role of the authenticated user:
+     * - Admin: all reservations with related customer, roomType, and hotel.
+     * - Customer: reservations only for the authenticated customer.
+     * - Hotel: reservations only for the authenticated hotel.
+     *
+     * @response 200 [
+     *   {
+     *     "id": 1,
+     *     "customer": { "id": 2, "user": { "name": "John Doe", "email": "john@example.com" } },
+     *     "roomType": { "id": 3, "name": "Suite" },
+     *     "hotel": { "id": 1, "name": "Hotel California" },
+     *     "check_in": "2025-06-15",
+     *     "check_out": "2025-06-20"
+     *   }
+     * ]
+     *
+     * @return JsonResponse JSON response with reservations.
      */
     public function index()
     {
@@ -31,6 +48,8 @@ class ReservationController extends Controller
             $reservations = Reservation::with(['customer.user', 'roomType', 'hotel'])
                 ->where('hotel_id', $hotelId)
                 ->get();
+        } else {
+            $reservations = collect();
         }
 
         return response()->json($reservations);
@@ -39,10 +58,23 @@ class ReservationController extends Controller
     /**
      * Display the specified reservation.
      *
-     * @param Reservation $reservation
-     * @return JsonResponse
+     * @authenticated
+     *
+     * @urlParam reservation int required The ID of the reservation. Example: 1
+     *
+     * @response 200 {
+     *   "id": 1,
+     *   "customer": { "id": 2, "user": { "name": "John Doe", "email": "john@example.com" } },
+     *   "roomType": { "id": 3, "name": "Suite" },
+     *   "hotel": { "id": 1, "name": "Hotel California" },
+     *   "check_in": "2025-06-15",
+     *   "check_out": "2025-06-20"
+     * }
+     *
+     * @param Reservation $reservation The reservation instance to show.
+     * @return JsonResponse JSON response with reservation and its relations.
      */
-    public function show(ReservationController $reservation)
+    public function show(Reservation $reservation)
     {
         return response()->json($reservation->load(['customer.user', 'roomType', 'hotel']));
     }
@@ -50,8 +82,25 @@ class ReservationController extends Controller
     /**
      * Store a newly created reservation.
      *
-     * @param Request $request
-     * @return JsonResponse
+     * @authenticated
+     *
+     * @bodyParam customer_id int required The ID of the customer making the reservation. Example: 2
+     * @bodyParam room_type_id int required The ID of the room type. Example: 3
+     * @bodyParam hotel_id int required The ID of the hotel. Example: 1
+     * @bodyParam check_in date required The check-in date. Example: 2025-06-15
+     * @bodyParam check_out date required The check-out date. Example: 2025-06-20
+     *
+     * @response 201 {
+     *   "id": 5,
+     *   "customer_id": 2,
+     *   "room_type_id": 3,
+     *   "hotel_id": 1,
+     *   "check_in": "2025-06-15",
+     *   "check_out": "2025-06-20"
+     * }
+     *
+     * @param ReservationRequest $request Validated reservation request.
+     * @return JsonResponse JSON response with the created reservation and HTTP status 201.
      */
     public function store(ReservationRequest $request)
     {
@@ -65,9 +114,25 @@ class ReservationController extends Controller
     /**
      * Update the specified reservation.
      *
-     * @param Request $request
-     * @param Reservation $reservation
-     * @return JsonResponse
+     * @urlParam reservation int required The ID of the reservation to update. Example: 5
+     * @bodyParam customer_id int The ID of the customer making the reservation. Example: 2
+     * @bodyParam room_type_id int The ID of the room type. Example: 3
+     * @bodyParam hotel_id int The ID of the hotel. Example: 1
+     * @bodyParam check_in date The check-in date. Example: 2025-06-15
+     * @bodyParam check_out date The check-out date. Example: 2025-06-20
+     *
+     * @response 200 {
+     *   "id": 5,
+     *   "customer_id": 2,
+     *   "room_type_id": 3,
+     *   "hotel_id": 1,
+     *   "check_in": "2025-06-15",
+     *   "check_out": "2025-06-20"
+     * }
+     *
+     * @param ReservationRequest $request Validated reservation request.
+     * @param Reservation $reservation The reservation to update.
+     * @return JsonResponse JSON response with the updated reservation.
      */
     public function update(ReservationRequest $request, Reservation $reservation)
     {
@@ -78,8 +143,12 @@ class ReservationController extends Controller
     /**
      * Remove the specified reservation.
      *
-     * @param Reservation $reservation
-     * @return JsonResponse
+     * @urlParam reservation int required The ID of the reservation to delete. Example: 5
+     *
+     * @response 204 {}
+     *
+     * @param Reservation $reservation The reservation to delete.
+     * @return JsonResponse JSON response with no content and HTTP status 204.
      */
     public function destroy(Reservation $reservation)
     {
@@ -87,3 +156,4 @@ class ReservationController extends Controller
         return response()->json(null, 204);
     }
 }
+

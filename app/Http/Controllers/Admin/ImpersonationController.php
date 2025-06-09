@@ -16,8 +16,11 @@ class ImpersonationController extends Controller
     /**
      * Start impersonating a user.
      *
-     * @param User $user
-     * @return RedirectResponse
+     * Stores the current authenticated user's ID in the session as 'impersonator_id',
+     * then logs in as the given user.
+     *
+     * @param User $user The user to impersonate.
+     * @return RedirectResponse Redirects to the 'welcome' route after impersonation starts.
      */
     public function start(User $user): RedirectResponse
     {
@@ -29,9 +32,12 @@ class ImpersonationController extends Controller
     }
 
     /**
-     * Stop impersonating the user and return to the original user.
+     * Stop impersonating and revert to the original user.
      *
-     * @return RedirectResponse
+     * Retrieves the original user ID from the session and logs back in as that user.
+     * If no original user ID is found, simply redirects to the 'users.index' route.
+     *
+     * @return RedirectResponse Redirects to the 'users.index' route after impersonation stops.
      */
     public function stop(): RedirectResponse
     {

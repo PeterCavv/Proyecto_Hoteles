@@ -29,7 +29,7 @@ class HotelController extends Controller
             ->get();
 
         return Inertia::render('Hotel/HotelIndex', [
-            'hotels' => $hotels->load('features'),
+            'hotels' => $hotels->load('features', 'city'),
             'filters' => $validated,
         ]);
     }
